@@ -68,9 +68,22 @@ Un très grand enjeu que nous aurons est que nous devrons apprendre toute la th�
 
 4.1 - Vues
  Les images ci-dessous sont des prototypes très simplifiés dessiner à l’aide de Paint3D pour donner une idée de notre application.
+    <img width="500" height="235" alt="image" src="https://github.com/user-attachments/assets/097b8a16-228b-438b-87d8-400ee6db2f38" />
+    <img width="429" height="201" alt="image" src="https://github.com/user-attachments/assets/94ca8147-e5a7-4d2c-b9c4-806999f7504d" />
+    <img width="474" height="437" alt="image" src="https://github.com/user-attachments/assets/eb11b108-0dc7-4a51-b21b-03554e79a5bc" />
+    <img width="454" height="419" alt="image" src="https://github.com/user-attachments/assets/ddbd2c2b-6225-40d6-9e05-75623edf9f26" />
+    <img width="926" height="435" alt="image" src="https://github.com/user-attachments/assets/587028f5-e14d-47bb-a485-b7e4255a30bd" />
+
     
+
+
+
  
 4.2 - Diagramme UML
+
+![UML prog](https://github.com/user-attachments/assets/c59e0774-32a6-464d-94dd-18f3c62e0ad5)
+
+
 
 
 
