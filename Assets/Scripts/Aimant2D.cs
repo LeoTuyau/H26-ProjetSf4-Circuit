@@ -1,16 +1,6 @@
 using UnityEngine;
 
-public class Aimant : MonoBehaviour
+public class Aimant2D : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector2 Moment => transform.up;
 }
