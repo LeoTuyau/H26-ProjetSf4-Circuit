@@ -4,31 +4,72 @@ using UnityEngine;
 public class CircuitManager : MonoBehaviour
 {
 
-    List<GameObject> resistances;
-    List<GameObject> piles;
-    bool circuitFerme = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    List<Composante> resistances;
+    List<Composante> piles;
+    ItemSpawner itemSpawner;
+
+
+
     void Start()
     {
-        ItemSpawner itemSpawner = GetComponent<ItemSpawner>();
-        List<GameObject> resistances = itemSpawner.getResistances();
-        List<GameObject> piles = itemSpawner.getPiles();
-        
-    }
+        itemSpawner = GetComponent<ItemSpawner>();
+        foreach (GameObject go in itemSpawner.getResistances())
+        {
+            resistances.Add(new Composante());
+        }
+        foreach (GameObject go in itemSpawner.getPiles())
+        {
+            resistances.Add(new Composante());
+        }
 
-    // Update is called once per frame
+
+    }
     void Update()
     {
         
     }
     public bool VerifierCircuitFerme()
     {
-        for (int i = 0; i < piles.Count; i++)
+        HashSet<Composante> visited = new HashSet<Composante>();
+
+        foreach (var start in piles)
         {
-
+            if (DFS(start, start, visited, null))
+                return true;
         }
-
 
         return false;
     }
+
+    private bool DFS(Composante current, Composante target, HashSet<Composante> visited, Composante parent)
+    {
+        visited.Add(current);
+
+        foreach (var voisin in current.getConnexions())
+        {
+            if (voisin == parent)
+                continue;
+
+            if (voisin == target)
+                return true;
+
+            if (!visited.Contains(voisin))
+            {
+                if (DFS(voisin, target, visited, current))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+    public void modeFil()
+    {
+
+        foreach(GameObject pile in itemSpawner.getPiles())
+        {
+            
+        }
+    }
 }
+
+
