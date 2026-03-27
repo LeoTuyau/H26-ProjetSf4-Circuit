@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
@@ -7,8 +8,9 @@ public class CircuitManager : MonoBehaviour
     List<Composante> resistances;
     List<Composante> piles;
     ItemSpawner itemSpawner;
-
-
+    [SerializeField] BouttonFil BtnFil;
+    [SerializeField] MouseManager mouseManager;
+    bool modeFil = false;
 
     void Start()
     {
@@ -62,12 +64,29 @@ public class CircuitManager : MonoBehaviour
 
         return false;
     }
-    public void modeFil()
-    {
 
-        foreach(GameObject pile in itemSpawner.getPiles())
+    public void ToggleFil()
+    {
+        if (!modeFil)
         {
-            
+            itemSpawner.spawnAnchors();
+            BtnFil.SetSelected(true);
+            modeFil = true;
+            mouseManager.SetMode("fil");
+        }
+        else
+        {
+            itemSpawner.removeAnchors();
+            BtnFil.SetSelected(false);
+            modeFil = false;
+            mouseManager.SetMode("defaut");
+        }
+    }
+    public void ToggleFil(bool modeFil)
+    {
+        if (this.modeFil!=modeFil)
+        {
+            ToggleFil();
         }
     }
 }
