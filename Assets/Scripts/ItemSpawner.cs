@@ -69,7 +69,7 @@ public class ItemSpawner : MonoBehaviour
     {
         return resistances;
     }
-    public void SpawnFil(filConnexion1, currentObject)
+    public void SpawnFil(GameObject filConnexion1, GameObject currentObject)
     {
         //A faire
     }
