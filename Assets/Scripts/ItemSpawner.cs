@@ -37,6 +37,10 @@ public class ItemSpawner : MonoBehaviour
         resistances.Add(newResistance);
         mm.DragButtonStart(newResistance);
     }
+    public void SpawnFil(GameObject filConnexion1, GameObject filConnexion2)
+    {
+        
+    }
     public void spawnAnchors()
     {
         foreach (GameObject pile in piles)
@@ -69,8 +73,9 @@ public class ItemSpawner : MonoBehaviour
     {
         return resistances;
     }
-    public void SpawnFil(GameObject filConnexion1, GameObject currentObject)
+
+    public List<GameObject> getFils()
     {
-        //A faire
+        return resistances;
     }
 }

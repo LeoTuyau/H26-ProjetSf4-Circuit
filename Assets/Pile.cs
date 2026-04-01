@@ -1,28 +1,9 @@
-using UnityEngine;
-
-public class Pile : MonoBehaviour
+public class Pile : Composante
 {
-    new bool light;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float Tension { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    public Pile(string nom, float tension) : base(nom)
     {
-        
-    }
-    public void setLight(bool light)
-    {
-        if (light)
-        {
-
-        }
-        else
-        {
-
-        }
+        Tension = tension;
     }
 }

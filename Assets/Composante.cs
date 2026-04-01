@@ -1,28 +1,28 @@
-using NUnit.Framework;
-using UnityEngine;
 using System.Collections.Generic;
 
-public class Composante : MonoBehaviour
+public abstract class Composante
 {
-    List<Composante> connexions = new List<Composante>();
-    int nbConnexions;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public string Nom { get; private set; }
+    protected List<Composante> connexions = new List<Composante>();
+
+    public Composante(string nom)
     {
-        
+        Nom = nom;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Connexion à une autre composante
+    public void Connecter(Composante autre)
     {
-        
+        if (!connexions.Contains(autre))
+        {
+            connexions.Add(autre);
+            autre.Connecter(this); // Connexion bidirectionnelle
+        }
     }
-    public List<Composante> getConnexions()
+
+    // Retourne la liste des connexions
+    public List<Composante> GetConnexions()
     {
         return connexions;
-    }
-    public int getNbConnexions()
-    {
-        return nbConnexions;
     }
 }

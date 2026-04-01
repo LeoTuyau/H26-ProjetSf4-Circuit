@@ -7,6 +7,7 @@ public class CircuitManager : MonoBehaviour
 
     List<Composante> resistances;
     List<Composante> piles;
+    List<Composante> fils;
     ItemSpawner itemSpawner;
     [SerializeField] BouttonFil BtnFil;
     [SerializeField] MouseManager mouseManager;
@@ -15,21 +16,29 @@ public class CircuitManager : MonoBehaviour
     void Start()
     {
         itemSpawner = GetComponent<ItemSpawner>();
+
+        resistances = new List<Composante>();
+        piles = new List<Composante>();
+        fils = new List<Composante>();
+
         foreach (GameObject go in itemSpawner.getResistances())
         {
-            resistances.Add(new Composante());
+            resistances.Add(go.GetComponent<Composante>());
         }
         foreach (GameObject go in itemSpawner.getPiles())
         {
-            resistances.Add(new Composante());
+            piles.Add(go.GetComponent<Composante>());
         }
-
-
+        foreach (GameObject go in itemSpawner.getFils())
+        {
+            fils.Add(go.GetComponent<Composante>());
+        }
     }
     void Update()
     {
         
     }
+    
     public bool VerifierCircuitFerme()
     {
         HashSet<Composante> visited = new HashSet<Composante>();
@@ -43,26 +52,35 @@ public class CircuitManager : MonoBehaviour
         return false;
     }
 
-    private bool DFS(Composante current, Composante target, HashSet<Composante> visited, Composante parent)
+
+    private void DFSChemins(Composante current, Composante target, HashSet<Composante> visited,
+                         List<Resistance> cheminActuel, List<List<Resistance>> chemins)
     {
         visited.Add(current);
 
-        foreach (var voisin in current.getConnexions())
+        if (current is Resistance r)
+            cheminActuel.Add(r);
+
+        foreach (var voisin in current.GetConnexions())
         {
-            if (voisin == parent)
-                continue;
-
-            if (voisin == target)
-                return true;
-
             if (!visited.Contains(voisin))
             {
-                if (DFS(voisin, target, visited, current))
-                    return true;
+                if (voisin == target)
+                {
+                    chemins.Add(new List<Resistance>(cheminActuel)); // sauvegarde du chemin
+                }
+                else
+                {
+                    DFSChemins(voisin, target, visited, cheminActuel, chemins);
+                }
             }
         }
 
-        return false;
+        // Backtracking
+        if (current is Resistance)
+            cheminActuel.RemoveAt(cheminActuel.Count - 1);
+
+        visited.Remove(current);
     }
 
     public void ToggleFil()
@@ -88,6 +106,10 @@ public class CircuitManager : MonoBehaviour
         {
             ToggleFil();
         }
+    }
+    public void AddFil(GameObject fil)
+    {
+        
     }
 }
 

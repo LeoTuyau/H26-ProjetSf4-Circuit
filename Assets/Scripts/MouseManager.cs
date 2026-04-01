@@ -4,14 +4,15 @@ using TMPro;
 
 public class MouseManager : MonoBehaviour
 {
-    private GameObject currentObject;
+    [SerializeField] GameObject currentObject;
+    [SerializeField] GameObject filConnexion1;
     string mode = "defaut";
     [SerializeField] CircuitManager CirMng;
     Vector3 mousePos;
     Vector3 worldPos;
     [SerializeField] TMP_Text tmp;
     int filCount = 0;
-    GameObject filConnexion1;
+    
     [SerializeField] ItemSpawner itemSpawner;
 
     void Update()
@@ -51,7 +52,7 @@ public class MouseManager : MonoBehaviour
             }
         }
         // Tant que le bouton est maintenu
-        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.name.Equals("Background") && !currentObject.name.Equals("Anchor"))
+        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
         {
             currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
         }
@@ -64,7 +65,7 @@ public class MouseManager : MonoBehaviour
     private void UpdateRelease()
     {
         // Tant que le bouton est maintenu
-        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.name.Equals("Background") && !currentObject.name.Equals("Anchor"))
+        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
         {
             currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
         }
@@ -81,27 +82,33 @@ public class MouseManager : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit)&& hit.collider.CompareTag("Anchor"))
             {
-                if (hit.collider.name.Contains("Anchor"))
+                currentObject = hit.collider.gameObject;
+                Anchor anchor = currentObject.GetComponent<Anchor>();
+                if (anchor != null)
                 {
-                    currentObject = hit.collider.gameObject;
-                    Anchor anchor = currentObject.GetComponent<Anchor>();
-                    if (anchor != null)
+                    if (!anchor.GetSelect())
                     {
-                        anchor.ToggleSelect();
                         filCount++;
-                        if(filCount == 1)
+                        if (filCount == 1)
                         {
                             filConnexion1 = currentObject;
                         }
-                        if(filCount == 2)
+                        if (filCount == 2)
                         {
+                            itemSpawner.SpawnFil(filConnexion1, currentObject);
+                            filConnexion1.GetComponent<Anchor>().ToggleSelect();
+                            currentObject.GetComponent<Anchor>().ToggleSelect();
                             mode = "defaut";
                             filCount = 0;
-                            itemSpawner.SpawnFil(filConnexion1, currentObject);
                         }
                     }
+                    else
+                    {
+                        filCount--;
+                    }
+                    anchor.ToggleSelect();
                 }
             }
         }
