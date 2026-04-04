@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PenduleScript : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class PenduleScript : MonoBehaviour
 
     private float angle = 45f * Mathf.Deg2Rad; // angle initial (en radians)
     private float angularVelocity = 0f;
+
+    public GraphScript graph;
+    public GameObject graphPanel;
 
 
 public void UpdateLength(float newValue)
@@ -37,5 +41,11 @@ public void UpdateLength(float newValue)
 
         // appliquer rotation (convertir en degrés)
         transform.localRotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+        
+        graph.AddValue(angle);
+      
+
+
+    
     }
 }
