@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections.Generic;
 
 public class MouseManager : MonoBehaviour
 {
@@ -12,12 +13,12 @@ public class MouseManager : MonoBehaviour
     Vector3 worldPos;
     [SerializeField] TMP_Text tmp;
     int filCount = 0;
-    
+
+
     [SerializeField] ItemSpawner itemSpawner;
 
     void Update()
     {
-
         mousePos = Mouse.current.position.ReadValue();
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
@@ -78,38 +79,44 @@ public class MouseManager : MonoBehaviour
     }
     private void UpdateModeFil()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        List<Anchor> selectedAnchors = new List<Anchor> ();
+        if (filCount != 2)
         {
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-
-            if (Physics.Raycast(ray, out RaycastHit hit)&& hit.collider.CompareTag("Anchor"))
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                currentObject = hit.collider.gameObject;
-                Anchor anchor = currentObject.GetComponent<Anchor>();
-                if (anchor != null)
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+                if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.CompareTag("Anchor"))
                 {
-                    if (!anchor.GetSelect())
+                    currentObject = hit.collider.gameObject;
+                    Anchor anchor = currentObject.GetComponent<Anchor>();
+                    if (anchor != null)
                     {
-                        filCount++;
-                        if (filCount == 1)
+                        if (!anchor.GetSelect())
                         {
-                            filConnexion1 = currentObject;
+                            selectedAnchors.Add(anchor);
+                            anchor.ToggleSelect();
+                            filCount++;
                         }
-                        if (filCount == 2)
+                        else
                         {
-                            itemSpawner.SpawnFil(filConnexion1, currentObject);
-                            filConnexion1.GetComponent<Anchor>().ToggleSelect();
-                            currentObject.GetComponent<Anchor>().ToggleSelect();
-                            mode = "defaut";
-                            filCount = 0;
+                            selectedAnchors.Remove(anchor);
+                            anchor.ToggleSelect();
+                            filCount--;
                         }
                     }
-                    else
-                    {
-                        filCount--;
-                    }
-                    anchor.ToggleSelect();
                 }
+            }
+        }
+        else
+        {
+
+            filCount = 0;
+            mode = "defaut";
+            CirMng.ToggleFil(false);
+            foreach (Anchor anchor in selectedAnchors)
+            {
+                anchor.ToggleSelect();
             }
         }
     }

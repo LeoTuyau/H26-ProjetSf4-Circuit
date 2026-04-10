@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public abstract class Composante
+public class Composante : MonoBehaviour
 {
     public string Nom { get; private set; }
     protected List<Composante> connexions = new List<Composante>();
@@ -10,17 +12,15 @@ public abstract class Composante
         Nom = nom;
     }
 
-    // Connexion à une autre composante
     public void Connecter(Composante autre)
     {
         if (!connexions.Contains(autre))
         {
             connexions.Add(autre);
-            autre.Connecter(this); // Connexion bidirectionnelle
+            autre.Connecter(this);
         }
     }
 
-    // Retourne la liste des connexions
     public List<Composante> GetConnexions()
     {
         return connexions;
