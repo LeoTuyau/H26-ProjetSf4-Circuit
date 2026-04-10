@@ -5,6 +5,7 @@ public class Anchor : MonoBehaviour
     Renderer rend;
     [SerializeField] Material YellowMaterial;
     [SerializeField] Material GreenMaterial;
+    bool Selected;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,11 +24,17 @@ public class Anchor : MonoBehaviour
         {
             Debug.Log("green");
             rend.sharedMaterial = GreenMaterial;
+            Selected = true;
         }
         else
         {
             Debug.Log("yellow");
             rend.sharedMaterial = YellowMaterial;
+            Selected = false;
         }
+    }
+    public bool GetSelect()
+    {
+        return this.Selected;
     }
 }
