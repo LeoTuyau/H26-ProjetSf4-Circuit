@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class DragObject2D : MonoBehaviour
@@ -15,7 +15,32 @@ public class DragObject2D : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (cameraPrincipale == null) return;
+        if (cameraPrincipale == null)
+            return;
+
+        Vector2 positionSourisMonde = cameraPrincipale.ScreenToWorldPoint(Input.mousePosition);
+
+        Collider2D[] objetsSousSouris = Physics2D.OverlapPointAll(positionSourisMonde);
+        if (objetsSousSouris == null || objetsSousSouris.Length == 0)
+            return;
+
+        Collider2D meilleurCollider = null;
+        int meilleurSortingOrder = int.MinValue;
+
+        foreach (Collider2D col in objetsSousSouris)
+        {
+            SpriteRenderer sr = col.GetComponent<SpriteRenderer>();
+            int ordre = sr != null ? sr.sortingOrder : 0;
+
+            if (ordre > meilleurSortingOrder)
+            {
+                meilleurSortingOrder = ordre;
+                meilleurCollider = col;
+            }
+        }
+
+        if (meilleurCollider == null || meilleurCollider.gameObject != gameObject)
+            return;
 
         Vector3 positionEcran = cameraPrincipale.WorldToScreenPoint(transform.position);
         distanceCamera = positionEcran.z;
@@ -30,7 +55,8 @@ public class DragObject2D : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (!estEnDeplacement || cameraPrincipale == null) return;
+        if (!estEnDeplacement || cameraPrincipale == null)
+            return;
 
         Vector3 positionSouris = Input.mousePosition;
         positionSouris.z = distanceCamera;
