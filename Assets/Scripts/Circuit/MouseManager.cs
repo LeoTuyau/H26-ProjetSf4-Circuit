@@ -13,6 +13,7 @@ public class MouseManager : MonoBehaviour
     Vector3 worldPos;
     [SerializeField] TMP_Text tmp;
     int filCount = 0;
+    List<Anchor> selectedAnchors = new List<Anchor>();
 
 
     [SerializeField] ItemSpawner itemSpawner;
@@ -79,8 +80,9 @@ public class MouseManager : MonoBehaviour
     }
     private void UpdateModeFil()
     {
-        List<Anchor> selectedAnchors = new List<Anchor> ();
-        if (filCount != 2)
+        Debug.Log("selected size"+selectedAnchors.Count);
+        filCount = selectedAnchors.Count;
+        if (selectedAnchors.Count < 2)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -92,17 +94,30 @@ public class MouseManager : MonoBehaviour
                     Anchor anchor = currentObject.GetComponent<Anchor>();
                     if (anchor != null)
                     {
+
                         if (!anchor.GetSelect())
                         {
-                            selectedAnchors.Add(anchor);
-                            anchor.ToggleSelect();
-                            filCount++;
+                            if (selectedAnchors.Count == 1)
+                            {
+                                if (selectedAnchors[0].GetAttache() != anchor.GetAttache()) {
+                                    selectedAnchors.Add(anchor);
+                                    anchor.ToggleSelect();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                selectedAnchors.Add(anchor);
+                                anchor.ToggleSelect();
+                            }
                         }
                         else
                         {
                             selectedAnchors.Remove(anchor);
                             anchor.ToggleSelect();
-                            filCount--;
                         }
                     }
                 }
@@ -110,14 +125,10 @@ public class MouseManager : MonoBehaviour
         }
         else
         {
-
-            filCount = 0;
             mode = "defaut";
             CirMng.ToggleFil(false);
-            foreach (Anchor anchor in selectedAnchors)
-            {
-                anchor.ToggleSelect();
-            }
+            CirMng.AddFil(selectedAnchors);
+            selectedAnchors.Clear();
         }
     }
     public void DragButtonStart(GameObject obj)

@@ -48,9 +48,11 @@ public class CircuitManager : MonoBehaviour
             ToggleFil();
         }
     }
-    public void AddFil(GameObject fil)
+    public void AddFil(List<Anchor> anchors)
     {
-
+        GameObject attache1 = anchors[0].GameObject();
+        GameObject attache2 = anchors[1].GameObject();
+        itemSpawner.SpawnFil(attache1, attache2);
     }
     public void AddPile(GameObject pile)
     {

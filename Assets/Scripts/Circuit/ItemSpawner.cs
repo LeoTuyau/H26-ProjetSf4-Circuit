@@ -9,6 +9,7 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] MouseManager mm;
     [SerializeField] CircuitManager cm;
     [SerializeField] GameObject anchor;
+    [SerializeField] GameObject fil;
 
     void Start()
     {
@@ -37,23 +38,28 @@ public class ItemSpawner : MonoBehaviour
     }
     public void SpawnFil(GameObject filConnexion1, GameObject filConnexion2)
     {
-        
+        Vector3 pos = (filConnexion1.transform.position + filConnexion2.transform.position) / 2;
+        Instantiate (fil, pos, Quaternion.Euler(Mathf.Asin(Vector3.Cross(filConnexion1.transform.position-filConnexion2.transform.position,new Vector3(1,0,0)).magnitude), 0,0));
     }
     public List<GameObject> spawnAnchors(List<GameObject> piles, List<GameObject> resistances)
     {
         List<GameObject> anchors = new List<GameObject>();
         foreach (GameObject pile in piles)
         {
-            GameObject a1 = Instantiate(anchor, pile.transform.position + new Vector3 (0.5f, 0, 0), Quaternion.Euler(0, 0, 0));
+            GameObject a1 = Instantiate(anchor, pile.transform.position + new Vector3(0.5f, 0, 0), Quaternion.Euler(0, 0, 0));
+            a1.GetComponent<Anchor>().SetAttache(pile);
             anchors.Add(a1);
             GameObject a2 = Instantiate(anchor, pile.transform.position + new Vector3 (-0.5f, 0, 0), Quaternion.Euler(0, 0, 0));
+            a2.GetComponent<Anchor>().SetAttache(pile);
             anchors.Add(a2);
         }
         foreach (GameObject resistance in resistances)
         {
             GameObject a1 = Instantiate(anchor, resistance.transform.position + new Vector3(1, 0, 0), Quaternion.Euler(0, 0, 0));
+            a1.GetComponent<Anchor>().SetAttache(resistance);
             anchors.Add(a1);
             GameObject a2 = Instantiate(anchor, resistance.transform.position + new Vector3(-1, 0, 0), Quaternion.Euler(0, 0, 0));
+            a2.GetComponent<Anchor>().SetAttache(resistance);
             anchors.Add(a2);
         }
         return anchors;

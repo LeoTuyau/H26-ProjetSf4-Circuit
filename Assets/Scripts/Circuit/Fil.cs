@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Fil : MonoBehaviour
 {
@@ -18,5 +19,9 @@ public class Fil : MonoBehaviour
     void Update()
     {
         
+    }
+    public void SetAttaches(List<GameObject> attaches)
+    {
+
     }
 }
