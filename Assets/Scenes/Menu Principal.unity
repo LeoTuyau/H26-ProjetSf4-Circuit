@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -275.53003, y: -93.00004}
+  m_AnchoredPosition: {x: -261, y: -93}
   m_SizeDelta: {x: 366.47, y: 74.067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27188644
@@ -210,7 +210,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: Circuit
+          m_StringArgument: Pendule
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &27188645
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation 4
+  m_text: Pendule
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1281,7 +1281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 746.8549, y: -455.08072}
+  m_AnchoredPosition: {x: 746.85, y: -375}
   m_SizeDelta: {x: 426.3, y: 102.786}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995918802
@@ -1691,7 +1691,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 446, y: 37.034}
+  m_AnchoredPosition: {x: 505, y: 68}
   m_SizeDelta: {x: 366.47, y: 74.067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1155363332
@@ -1747,7 +1747,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: Boussole
+          m_StringArgument: Boussole et aimant
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1155363333
@@ -1770,7 +1770,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation 3
+  m_text: 'Boussole et aimant
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2304,7 +2306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -454, y: 37.033}
+  m_AnchoredPosition: {x: -498, y: 68}
   m_SizeDelta: {x: 366.47, y: 74.067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1372847864
@@ -2383,7 +2385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation 1
+  m_text: Champ Magnetique
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2497,7 +2499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -17.949, y: 37.034}
+  m_AnchoredPosition: {x: -17.949, y: 68.000015}
   m_SizeDelta: {x: 366.47, y: 74.067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1444258775
@@ -2576,7 +2578,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation 2
+  m_text: Circuit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3133,7 +3135,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 249, y: -93}
+  m_AnchoredPosition: {x: 233, y: -93}
   m_SizeDelta: {x: 366.47, y: 74.067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1911921043
@@ -3189,7 +3191,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: Circuit
+          m_StringArgument: Fil conducteur
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1911921044
@@ -3212,7 +3214,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Simulation 5
+  m_text: Fil conducteur
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
