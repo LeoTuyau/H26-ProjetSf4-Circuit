@@ -11,6 +11,7 @@ public class PenduleScript : MonoBehaviour
 
     public GraphScript graph;
     public GameObject graphPanel;
+    
 
 
 public void UpdateLength(float newValue)
