@@ -1038,7 +1038,7 @@ PrefabInstance:
       addedObject: {fileID: 1308170977}
     - targetCorrespondingSourceObject: {fileID: 1425087831317128516, guid: ba7dc7d3f8ec2f249bafe01618a2e0cf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1308170976}
+      addedObject: {fileID: 1308170980}
   m_SourcePrefab: {fileID: 100100000, guid: ba7dc7d3f8ec2f249bafe01618a2e0cf, type: 3}
 --- !u!1 &1308170972 stripped
 GameObject:
@@ -1060,18 +1060,6 @@ MonoBehaviour:
   fil: {fileID: 1829149957}
   aiguille: {fileID: 2103260407}
   vitesseRotation: 5
---- !u!114 &1308170976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1308170972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d350ea3a9f36a6d4ab12cebc060f2316, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &1308170977
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1108,6 +1096,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &1308170980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308170972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 245eeb1ef0d21074ca63094b770328fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1590509341
 PrefabInstance:
   m_ObjectHideFlags: 0
