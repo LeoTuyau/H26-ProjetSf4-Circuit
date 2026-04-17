@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,31 +37,60 @@ public class ItemSpawner : MonoBehaviour
         cm.AddResistance(newResistance);
         mm.DragButtonStart(newResistance);
     }
-    public void SpawnFil(GameObject filConnexion1, GameObject filConnexion2)
+    public GameObject SpawnFil(GameObject filConnexion1, GameObject filConnexion2)
     {
         Vector3 pos = (filConnexion1.transform.position + filConnexion2.transform.position) / 2;
-        Instantiate (fil, pos, Quaternion.Euler(Mathf.Asin(Vector3.Cross(filConnexion1.transform.position-filConnexion2.transform.position,new Vector3(1,0,0)).magnitude), 0,0));
+        GameObject fil1 = Instantiate (fil, pos, Quaternion.LookRotation(Vector3.Cross(filConnexion1.transform.position - filConnexion2.transform.position,new Vector3(0,0,1))));
+        fil1.transform.localScale = new Vector3(1, (filConnexion1.transform.position - filConnexion2.transform.position).magnitude, 1);
+        return fil1;
     }
     public List<GameObject> spawnAnchors(List<GameObject> piles, List<GameObject> resistances)
     {
         List<GameObject> anchors = new List<GameObject>();
         foreach (GameObject pile in piles)
         {
-            GameObject a1 = Instantiate(anchor, pile.transform.position + new Vector3(0.5f, 0, 0), Quaternion.Euler(0, 0, 0));
-            a1.GetComponent<Anchor>().SetAttache(pile);
-            anchors.Add(a1);
-            GameObject a2 = Instantiate(anchor, pile.transform.position + new Vector3 (-0.5f, 0, 0), Quaternion.Euler(0, 0, 0));
-            a2.GetComponent<Anchor>().SetAttache(pile);
-            anchors.Add(a2);
+            AddAnchors(anchors, anchor, pile, new Vector3(0.5f, 0, 0));
         }
         foreach (GameObject resistance in resistances)
         {
-            GameObject a1 = Instantiate(anchor, resistance.transform.position + new Vector3(1, 0, 0), Quaternion.Euler(0, 0, 0));
-            a1.GetComponent<Anchor>().SetAttache(resistance);
-            anchors.Add(a1);
-            GameObject a2 = Instantiate(anchor, resistance.transform.position + new Vector3(-1, 0, 0), Quaternion.Euler(0, 0, 0));
-            a2.GetComponent<Anchor>().SetAttache(resistance);
-            anchors.Add(a2);
+            AddAnchors(anchors, anchor, resistance, new Vector3(1, 0, 0));
+        }
+        return anchors;
+    }
+    private List<GameObject> AddAnchors(List<GameObject> anchors, GameObject anchor, GameObject parent, Vector3 offset)
+    {
+        string tag = parent.tag;
+
+        if(tag == "Pile")
+        {
+            if (!parent.GetComponent<Pile>().getAttach1())
+            {
+                GameObject a1 = Instantiate(anchor, parent.transform.position + new Vector3(-offset.x, 0, 0), Quaternion.Euler(0, 0, 0));
+                a1.GetComponent<Anchor>().SetAttache(parent);
+                anchors.Add(a1);
+            }
+            if (!parent.GetComponent<Pile>().getAttach2())
+            {
+                GameObject a2 = Instantiate(anchor, parent.transform.position + new Vector3(offset.x, 0, 0), Quaternion.Euler(0, 0, 0));
+                a2.GetComponent<Anchor>().SetAttache(parent);
+                anchors.Add(a2);
+            }
+
+        }
+        if (tag == "Resistance")
+        {
+            if (!parent.GetComponent<Resistance>().getAttach1())
+            {
+                GameObject a1 = Instantiate(anchor, parent.transform.position + new Vector3(-offset.x, 0, 0), Quaternion.Euler(0, 0, 0));
+                a1.GetComponent<Anchor>().SetAttache(parent);
+                anchors.Add(a1);
+            }
+            if (!parent.GetComponent<Resistance>().getAttach2())
+            {
+                GameObject a2 = Instantiate(anchor, parent.transform.position + new Vector3(offset.x, 0, 0), Quaternion.Euler(0, 0, 0));
+                a2.GetComponent<Anchor>().SetAttache(parent);
+                anchors.Add(a2);
+            }
         }
         return anchors;
     }
@@ -68,7 +98,7 @@ public class ItemSpawner : MonoBehaviour
     {
         foreach (GameObject anchor in anchors)
         {
-            Destroy(anchor);
+                Destroy(anchor);
         }
     }
 }

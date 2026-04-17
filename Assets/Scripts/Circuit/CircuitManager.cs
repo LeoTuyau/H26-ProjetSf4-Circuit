@@ -52,7 +52,27 @@ public class CircuitManager : MonoBehaviour
     {
         GameObject attache1 = anchors[0].GameObject();
         GameObject attache2 = anchors[1].GameObject();
-        itemSpawner.SpawnFil(attache1, attache2);
+
+        if (attache1.GetComponent<Anchor>().GetAttache().GetComponent<Pile>() != null)
+        {
+            attache1.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().setAnchor1(attache1);
+        }
+        else if (attache1.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>() != null)
+        {
+            attache1.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().setAnchor1(attache1);
+        }
+
+
+        if (attache2.GetComponent<Anchor>().GetAttache().GetComponent<Pile>() != null)
+        {
+            attache2.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().setAnchor2(attache2);
+        }
+        else if (attache2.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>() != null)
+        {
+            attache2.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().setAnchor2(attache2);
+        }
+
+        fils.Add(itemSpawner.SpawnFil(attache1, attache2));
     }
     public void AddPile(GameObject pile)
     {

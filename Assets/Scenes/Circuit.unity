@@ -1158,7 +1158,7 @@ GameObject:
   - component: {fileID: 1039443154}
   m_Layer: 0
   m_Name: Resistance
-  m_TagString: Untagged
+  m_TagString: Resistance
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1191,6 +1191,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e634a8c06c443d45b7f1cfee1972bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attach1: 0
+  attach2: 0
+  anchor1: {fileID: 0}
+  anchor2: {fileID: 0}
 --- !u!65 &1039443154
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1742,7 +1746,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -406}
+  m_AnchoredPosition: {x: 0, y: -394}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1577655631
@@ -1932,7 +1936,7 @@ GameObject:
   - component: {fileID: 1659453112}
   m_Layer: 0
   m_Name: Pile
-  m_TagString: Untagged
+  m_TagString: Pile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1987,6 +1991,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117c7a3afae1d1642828929bd708ec25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attach1: 0
+  attach2: 0
+  anchor1: {fileID: 0}
+  anchor2: {fileID: 0}
 --- !u!1 &1693981313
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Background
   - Anchor
+  - Structure
+  - Pile
+  - Resistance
   layers:
   - Default
   - TransparentFX
