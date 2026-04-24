@@ -24,8 +24,12 @@ public class GraphScript : MonoBehaviour
     void DrawGraph()
     {
         foreach (Transform child in graphContainer)
-            Destroy(child.gameObject);
+{
+    if (child.CompareTag("GraphStatic"))
+        continue;
 
+    Destroy(child.gameObject);
+}
         float width = graphContainer.sizeDelta.x;
         float height = graphContainer.sizeDelta.y;
 
