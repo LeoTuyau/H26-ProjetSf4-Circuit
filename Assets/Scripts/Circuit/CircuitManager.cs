@@ -21,7 +21,7 @@ public class CircuitManager : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
 
     public void ToggleFil()
@@ -48,31 +48,37 @@ public class CircuitManager : MonoBehaviour
             ToggleFil();
         }
     }
-    public void AddFil(List<Anchor> anchors)
+    public void AddFil(List<GameObject> anchors)
     {
-        GameObject attache1 = anchors[0].GameObject();
-        GameObject attache2 = anchors[1].GameObject();
+        GameObject a1 = anchors[0];
+        GameObject a2 = anchors[1];
 
-        if (attache1.GetComponent<Anchor>().GetAttache().GetComponent<Pile>() != null)
-        {
-            attache1.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().setAnchor1(attache1);
-        }
-        else if (attache1.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>() != null)
-        {
-            attache1.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().setAnchor1(attache1);
-        }
+        Composante composante1 = a1.GetComponent<Anchor>().GetAttache().GetComponent<Composante>();
+        Composante composante2 = a2.GetComponent<Anchor>().GetAttache().GetComponent<Composante>();
 
+        composante1.Connecter(composante2);
 
-        if (attache2.GetComponent<Anchor>().GetAttache().GetComponent<Pile>() != null)
+        switch (composante1.getAnchor(a1))
         {
-            attache2.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().setAnchor2(attache2);
-        }
-        else if (attache2.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>() != null)
-        {
-            attache2.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().setAnchor2(attache2);
+            case 1:
+                composante1.setAttach1(true);
+                break;
+            case 2:
+                composante1.setAttach2(true);
+                break;
         }
 
-        fils.Add(itemSpawner.SpawnFil(attache1, attache2));
+        switch (composante2.getAnchor(a2))
+        {
+            case 1:
+                composante2.setAttach1(true);
+                break;
+            case 2:
+                composante2.setAttach2(true);
+                break;
+        }
+        
+        fils.Add(itemSpawner.SpawnFil(a1, a2));
     }
     public void AddPile(GameObject pile)
     {
