@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,10 +12,7 @@ public class Composante : MonoBehaviour
     [SerializeField] protected GameObject anchor1;
     [SerializeField] protected GameObject anchor2;
 
-    public Composante(string nom)
-    {
-        Nom = nom;
-    }
+    protected virtual void Init() { }
 
     public void Connecter(Composante autre)
     {
@@ -24,6 +21,11 @@ public class Composante : MonoBehaviour
             connexions.Add(autre);
             autre.Connecter(this);
         }
+    }
+    public void Deconnecter(Composante autre)
+    {
+        if (connexions.Remove(autre))
+            autre.connexions.Remove(this);
     }
 
     public List<Composante> GetConnexions()
@@ -69,4 +71,18 @@ public class Composante : MonoBehaviour
             anchor2 = null;
         }
     }
+    // ─── Simulation ───────────────────────────────────────────────────
+
+    // Tension aux bornes de cette composante (V)
+    public virtual float Tension => 0f;
+
+    // Resistance equivalente (Ohms) — surchargee par Resistance
+    public virtual float ValeurOhms => 0f;
+
+    // Courant traversant la composante (A) — injecte par CircuitManager
+    public float Courant { get; set; }
+    public void SetCourant(float c) => Courant = c;
+
+    // Puissance dissipee (W)
+    public float Puissance => Tension * Courant;
 }

@@ -22,20 +22,18 @@ public class Fil : MonoBehaviour
     {
         if (ObjetA != null && ObjetB != null)
         {
-            Debug.Log("yerp");
-            Vector3 posAnchorA = ObjetA.transform.position + transform.right * anchorOffsetA;
-            Vector3 posAnchorB = ObjetB.transform.position + transform.right * anchorOffsetB;
+            Vector3 posAnchorA = (ObjetA.transform.position + ObjetA.transform.right * anchorOffsetA);
+            Vector3 posAnchorB = (ObjetB.transform.position + ObjetB.transform.right * anchorOffsetB);
 
             transform.position = (posAnchorA + posAnchorB) / 2;
             transform.rotation = Quaternion.LookRotation(Vector3.Cross(posAnchorA - posAnchorB, new Vector3(0, 0, 1)));
-            transform.localScale = new Vector3(0, (posAnchorA - posAnchorB).magnitude, 0);
+            transform.localScale = new Vector3(1, (posAnchorA - posAnchorB).magnitude, 1);
         }
     }
     public void SetAttaches(GameObject ObjetA, GameObject ObjetB)
     {
-        Debug.Log("yo");
         this.ObjetA = ObjetA;
-        this.ObjetA = ObjetB;
+        this.ObjetB = ObjetB;
     }
     public void SetAnchorOffsets(GameObject AnchorA, GameObject AnchorB)
     {

@@ -69,7 +69,7 @@ public class ItemSpawner : MonoBehaviour
             Vector3 rotation = parent.transform.eulerAngles;
             GameObject a1 = Instantiate(anchor, parent.transform.position + parent.transform.right * -offset, Quaternion.Euler(0, 0, 0));
             a1.GetComponent<Anchor>().SetAttache(parent);
-            a1.GetComponent<Anchor>().SetOffset(offset);
+            a1.GetComponent<Anchor>().SetOffset(-offset);
             parent.GetComponent<Composante>().setAnchor1(a1);
             anchors.Add(a1);
         }

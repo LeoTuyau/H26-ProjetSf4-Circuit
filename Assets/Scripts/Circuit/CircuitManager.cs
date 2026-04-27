@@ -88,6 +88,11 @@ public class CircuitManager : MonoBehaviour
     {
         resistances.Add(resistance);
     }
+    bool circuitFerme()
+    {
+
+        return true;
+    }
     
 }
 
