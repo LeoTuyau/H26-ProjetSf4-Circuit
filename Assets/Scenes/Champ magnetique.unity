@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 327555113}
   - component: {fileID: 327555114}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: SliderCharge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,7 +284,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -639, y: -394}
+  m_AnchoredPosition: {x: -639, y: -373.12}
   m_SizeDelta: {x: 504, y: 72.136}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &327555114
@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 765757371}
   - component: {fileID: 765757370}
   m_Layer: 5
-  m_Name: Backround
+  m_Name: SceneBackround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 791974675}
   - component: {fileID: 791974674}
   m_Layer: 5
-  m_Name: Ball
+  m_Name: BouttonSpawnBalle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -588,8 +588,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 717, y: -376.69}
-  m_SizeDelta: {x: 354.278, y: 79.281}
+  m_AnchoredPosition: {x: 717, y: -354.98114}
+  m_SizeDelta: {x: 354.278, y: 122.699}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &791974674
 MonoBehaviour:
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 8a0fc7041e1f47e4f978538356ed6fd9, type: 2}
-  m_Color: {r: 0.8207547, g: 0.12001601, b: 0.12001601, a: 1}
+  m_Color: {r: 0.9926078, g: 0.2396226, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 930375242}
   - component: {fileID: 930375245}
   m_Layer: 0
-  m_Name: BallTexte
+  m_Name: TexteChargeParticule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,7 +1084,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 953de0a59c3f3c7498ecb7496a450d69, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1114,7 +1114,7 @@ GameObject:
   - component: {fileID: 1142555830}
   - component: {fileID: 1142555829}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: BlueSliderBackround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1136,7 +1136,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -510.92, y: -394}
+  m_AnchoredPosition: {x: -510.92, y: -373.12}
   m_SizeDelta: {x: 253.389, y: 72.137}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1142555829
@@ -1189,7 +1189,7 @@ GameObject:
   - component: {fileID: 1210450048}
   - component: {fileID: 1210450047}
   m_Layer: 5
-  m_Name: Image
+  m_Name: RedSliderBackround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1211,7 +1211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -764.3058, y: -394}
+  m_AnchoredPosition: {x: -764.31, y: -373.12}
   m_SizeDelta: {x: 253.389, y: 72.137}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1210450047
@@ -1264,7 +1264,7 @@ GameObject:
   - component: {fileID: 1358124995}
   - component: {fileID: 1358124994}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: TexteBalle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1309,7 +1309,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ball
+  m_text: 'Balle
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1403,7 +1405,7 @@ GameObject:
   - component: {fileID: 1455685212}
   - component: {fileID: 1455685217}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: "ParticuleCharg\xE9e"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1598,7 +1600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 3973caf801ba6864d98890213e90590b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1629,7 +1631,7 @@ GameObject:
   - component: {fileID: 1882657516}
   - component: {fileID: 1882657515}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1757,8 +1759,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 10.365997, y: 0.000011444092}
+  m_SizeDelta: {x: 40.732, y: -11.163}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2053275581
 MonoBehaviour:
@@ -1773,14 +1775,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.87169814, g: 0.87169814, b: 0.87169814, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 7bb453e60457740498a4615f241fd210, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
