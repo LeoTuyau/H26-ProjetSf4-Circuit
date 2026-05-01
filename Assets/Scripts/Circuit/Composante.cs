@@ -6,32 +6,29 @@ using UnityEngine.UI;
 public class Composante : MonoBehaviour
 {
     public string Nom { get; private set; }
-    [SerializeField] protected List<Composante> connexions = new List<Composante>();
     [SerializeField] protected bool attach1 = false;
     [SerializeField] protected bool attach2 = false;
     [SerializeField] protected GameObject anchor1;
     [SerializeField] protected GameObject anchor2;
+    protected List<(Composante composante, int borne)> connexions = new List<(Composante, int)>();
 
     protected virtual void Init() { }
 
-    public void Connecter(Composante autre)
+    public void Connecter(Composante autre, int maBorne, int autreBorne)
     {
-        if (connexions!=null && !connexions.Contains(autre))
+        if (!connexions.Contains((autre, maBorne)))
         {
-            connexions.Add(autre);
-            autre.Connecter(this);
+            connexions.Add((autre, maBorne == 0 ? autreBorne : maBorne));
+            autre.connexions.Add((this, autreBorne == 0 ? maBorne : autreBorne));
         }
     }
-    public void Deconnecter(Composante autre)
+    public void Deconnecter(Composante autre, int maBorne, int autreBorne)
     {
-        if (connexions.Remove(autre))
-            autre.connexions.Remove(this);
+        connexions.Remove((autre, maBorne));
+        autre.connexions.Remove((this, autreBorne));
     }
 
-    public List<Composante> GetConnexions()
-    {
-        return connexions;
-    }
+    public List<(Composante composante, int borne)> GetConnexions() => connexions;
 
     //Visuel
     public bool getAttach1() { return attach1; }
@@ -60,7 +57,7 @@ public class Composante : MonoBehaviour
     {
         anchor2 = null;
     }
-    public void removeAnchor(GameObject anchor)
+    public void RemoveAnchor(GameObject anchor)
     {
         if (anchor1 == anchor)
         {
@@ -71,6 +68,7 @@ public class Composante : MonoBehaviour
             anchor2 = null;
         }
     }
+
     // ─── Simulation ───────────────────────────────────────────────────
 
     // Tension aux bornes de cette composante (V)

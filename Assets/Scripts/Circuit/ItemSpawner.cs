@@ -8,6 +8,7 @@ public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] GameObject pile;
     [SerializeField] GameObject resistance;
+    [SerializeField] GameObject node;
     [SerializeField] MouseManager mm;
     [SerializeField] CircuitManager cm;
     [SerializeField] GameObject anchor;
@@ -38,6 +39,14 @@ public class ItemSpawner : MonoBehaviour
         cm.AddResistance(newResistance);
         mm.DragButtonStart(newResistance);
     }
+    public void spawnNode()
+    {
+        Vector3 mousePos = Mouse.current.position.ReadValue();
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        GameObject newNode = Instantiate(node, new Vector3(worldPos.x, worldPos.y, 0), Quaternion.Euler(0, 0, 0));
+        cm.AddNode(newNode);
+        mm.DragButtonStart(newNode);
+    }
     public GameObject SpawnFil(GameObject filConnexion1, GameObject filConnexion2)
     {
         Vector3 pos = (filConnexion1.transform.position + filConnexion2.transform.position) / 2;
@@ -49,7 +58,7 @@ public class ItemSpawner : MonoBehaviour
         
         return fil1;
     }
-    public List<GameObject> spawnAnchors(List<GameObject> piles, List<GameObject> resistances)
+    public List<GameObject> spawnAnchors(List<GameObject> piles, List<GameObject> resistances, List<GameObject> nodes)
     {
         List<GameObject> anchors = new List<GameObject>();
         foreach (GameObject pile in piles)
@@ -60,28 +69,43 @@ public class ItemSpawner : MonoBehaviour
         {
             anchors = AddAnchors(anchors, anchor, resistance, 1);
         }
+        foreach (GameObject node in nodes)
+        {
+            anchors = AddAnchors(anchors, anchor, node, 0);
+        }
         return anchors;
     }
     private List<GameObject> AddAnchors(List<GameObject> anchors, GameObject anchor, GameObject parent, float offset)
     {
-        if (!parent.GetComponent<Composante>().getAttach1())
+        Vector3 rotation = parent.transform.eulerAngles;
+        if (!parent.CompareTag("Node"))
         {
-            Vector3 rotation = parent.transform.eulerAngles;
-            GameObject a1 = Instantiate(anchor, parent.transform.position + parent.transform.right * -offset, Quaternion.Euler(0, 0, 0));
-            a1.GetComponent<Anchor>().SetAttache(parent);
-            a1.GetComponent<Anchor>().SetOffset(-offset);
-            parent.GetComponent<Composante>().setAnchor1(a1);
+            if (!parent.GetComponent<Composante>().getAttach1())
+            {
+                GameObject a1 = Instantiate(anchor, parent.transform.position + parent.transform.right * -offset, Quaternion.Euler(0, 0, 0));
+                a1.GetComponent<Anchor>().SetAttache(parent);
+                a1.GetComponent<Anchor>().SetOffset(-offset);
+                parent.GetComponent<Composante>().setAnchor1(a1);
+                anchors.Add(a1);
+            }
+            if (!parent.GetComponent<Composante>().getAttach2())
+            {
+                GameObject a2 = Instantiate(anchor, parent.transform.position + parent.transform.right * offset, Quaternion.Euler(0, 0, 0));
+                a2.GetComponent<Anchor>().SetAttache(parent);
+                a2.GetComponent<Anchor>().SetOffset(offset);
+                parent.GetComponent<Composante>().setAnchor2(a2);
+                anchors.Add(a2);
+            }
+        }
+        else
+        {
+            GameObject a1 = Instantiate(anchor,parent.transform.position + Vector3.back, Quaternion.Euler(0, 0, 0));
+            a1.GetComponent <Anchor>().SetAttache(parent);
+            a1.GetComponent <Anchor>().SetOffset(0f);
+            parent.GetComponent<Node>().AddAnchor(a1);
             anchors.Add(a1);
         }
-        if (!parent.GetComponent<Composante>().getAttach2())
-        {
-            GameObject a2 = Instantiate(anchor, parent.transform.position + parent.transform.right * offset, Quaternion.Euler(0, 0, 0));
-            a2.GetComponent<Anchor>().SetAttache(parent);
-            a2.GetComponent<Anchor>().SetOffset(offset);
-            parent.GetComponent<Composante>().setAnchor2(a2);
-            anchors.Add(a2);
-        }
-        return anchors;
+            return anchors;
     }
     public void removeAnchors(List<GameObject> anchors)
     {
@@ -89,11 +113,11 @@ public class ItemSpawner : MonoBehaviour
         {
             if (anchor.GetComponent<Anchor>().GetAttache().GetComponent<Pile>() != null) //Si pile
             {
-                anchor.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().removeAnchor(anchor); //Enlever le Anchor de l'objet
+                anchor.GetComponent<Anchor>().GetAttache().GetComponent<Pile>().RemoveAnchor(anchor); //Enlever le Anchor de l'objet
             }
             else if (anchor.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>() != null) //Si resistance
             {
-                anchor.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().removeAnchor(anchor); //Enlever le Anchor de l'objet
+                anchor.GetComponent<Anchor>().GetAttache().GetComponent<Resistance>().RemoveAnchor(anchor); //Enlever le Anchor de l'objet
             }
             Destroy(anchor); // Detruire le Anchor
 
