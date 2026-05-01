@@ -13,6 +13,7 @@ public class MouseManager : MonoBehaviour
     Vector3 worldPos;
     [SerializeField] TMP_Text tmp;
     int filCount = 0;
+    [SerializeField] List<GameObject> selectedAnchors = new List<GameObject>();
 
 
     [SerializeField] ItemSpawner itemSpawner;
@@ -26,16 +27,18 @@ public class MouseManager : MonoBehaviour
         switch (mode)
         {
             case "defaut":
-                UpdateModeDefault();
                 tmp.text = "Mode : defaut";
+                selectedAnchors.Clear();
+                UpdateModeDefault();
                 break;
             case "buttonPress":
-                UpdateRelease();
                 tmp.text = "Mode : buttonPress";
+                selectedAnchors.Clear();
+                UpdateRelease();
                 break;
             case "fil":
-                UpdateModeFil();
                 tmp.text = "Mode : fil";
+                UpdateModeFil();
                 break;
         }
     }
@@ -56,8 +59,12 @@ public class MouseManager : MonoBehaviour
         if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
         {
             currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                currentObject.transform.Rotate(0, 0, 90);
+            }
         }
-        // Quand on relâche
+        // Quand on relï¿½che
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             currentObject = null;
@@ -69,8 +76,12 @@ public class MouseManager : MonoBehaviour
         if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
         {
             currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                currentObject.transform.Rotate(0, 0, 90);
+            }
         }
-        // Quand on relâche
+        // Quand on relache
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             currentObject = null;
@@ -79,8 +90,7 @@ public class MouseManager : MonoBehaviour
     }
     private void UpdateModeFil()
     {
-        List<Anchor> selectedAnchors = new List<Anchor> ();
-        if (filCount != 2)
+        if (filCount < 2) //On n'est pas encore a deux anchors
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -92,17 +102,26 @@ public class MouseManager : MonoBehaviour
                     Anchor anchor = currentObject.GetComponent<Anchor>();
                     if (anchor != null)
                     {
-                        if (!anchor.GetSelect())
+                        if (!anchor.GetSelect()) // Anchor pas selecte
                         {
-                            selectedAnchors.Add(anchor);
-                            anchor.ToggleSelect();
-                            filCount++;
+                            if (filCount == 1)
+                            {
+                                if (selectedAnchors[0].GetComponent<Anchor>().GetAttache() != anchor.GetAttache())
+                                {
+                                    selectedAnchors.Add(currentObject);
+                                    anchor.ToggleSelect();
+                                }
+                            }
+                            else // selectedAnchors = 0
+                            {
+                                selectedAnchors.Add(currentObject);
+                                anchor.ToggleSelect();
+                            }
                         }
-                        else
+                        else // Anchor deja selecte
                         {
-                            selectedAnchors.Remove(anchor);
+                            selectedAnchors.Remove(currentObject);
                             anchor.ToggleSelect();
-                            filCount--;
                         }
                     }
                 }
@@ -110,15 +129,12 @@ public class MouseManager : MonoBehaviour
         }
         else
         {
-
-            filCount = 0;
             mode = "defaut";
+            CirMng.AddFil(selectedAnchors);
+            selectedAnchors.Clear();
             CirMng.ToggleFil(false);
-            foreach (Anchor anchor in selectedAnchors)
-            {
-                anchor.ToggleSelect();
-            }
         }
+        filCount = selectedAnchors.Count;
     }
     public void DragButtonStart(GameObject obj)
     {

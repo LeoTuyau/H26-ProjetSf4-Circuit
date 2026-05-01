@@ -1,9 +1,13 @@
+using UnityEngine;
+
 public class Pile : Composante
 {
-    public float Tension { get; private set; }
+    [SerializeField] private float tension = 9f;
 
-    public Pile(string nom, float tension) : base(nom)
-    {
-        Tension = tension;
-    }
+    public override float Tension => tension;
+    public override float ValeurOhms => 0f; // source idéale
+
+    public void SetTension(float v) => tension = Mathf.Max(0f, v);
+
+    private void OnValidate() => tension = Mathf.Max(0f, tension);
 }

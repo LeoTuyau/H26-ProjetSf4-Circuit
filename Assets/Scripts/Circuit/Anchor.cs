@@ -6,7 +6,8 @@ public class Anchor : MonoBehaviour
     [SerializeField] Material YellowMaterial;
     [SerializeField] Material GreenMaterial;
     bool Selected;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] GameObject Attache;
+    [SerializeField] float Offset;
     void Start()
     {
         rend = GetComponent<Renderer>();
@@ -16,7 +17,7 @@ public class Anchor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void ToggleSelect()
     {
@@ -36,5 +37,21 @@ public class Anchor : MonoBehaviour
     public bool GetSelect()
     {
         return this.Selected;
+    }
+    public GameObject GetAttache()
+    {
+        return Attache;
+    }
+    public void SetAttache(GameObject Attache)
+    {
+        this.Attache = Attache;
+    }
+    public void SetOffset(float Offset)
+    {
+        this.Offset = Offset;
+    }
+    public float GetOffset()
+    {
+        return Offset;
     }
 }

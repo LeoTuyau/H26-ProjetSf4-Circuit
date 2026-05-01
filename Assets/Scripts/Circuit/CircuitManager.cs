@@ -21,7 +21,7 @@ public class CircuitManager : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
 
     public void ToggleFil()
@@ -48,9 +48,37 @@ public class CircuitManager : MonoBehaviour
             ToggleFil();
         }
     }
-    public void AddFil(GameObject fil)
+    public void AddFil(List<GameObject> anchors)
     {
+        GameObject a1 = anchors[0];
+        GameObject a2 = anchors[1];
 
+        Composante composante1 = a1.GetComponent<Anchor>().GetAttache().GetComponent<Composante>();
+        Composante composante2 = a2.GetComponent<Anchor>().GetAttache().GetComponent<Composante>();
+
+        composante1.Connecter(composante2);
+
+        switch (composante1.getAnchor(a1))
+        {
+            case 1:
+                composante1.setAttach1(true);
+                break;
+            case 2:
+                composante1.setAttach2(true);
+                break;
+        }
+
+        switch (composante2.getAnchor(a2))
+        {
+            case 1:
+                composante2.setAttach1(true);
+                break;
+            case 2:
+                composante2.setAttach2(true);
+                break;
+        }
+        
+        fils.Add(itemSpawner.SpawnFil(a1, a2));
     }
     public void AddPile(GameObject pile)
     {
@@ -59,6 +87,11 @@ public class CircuitManager : MonoBehaviour
     public void AddResistance(GameObject resistance)
     {
         resistances.Add(resistance);
+    }
+    bool circuitFerme()
+    {
+
+        return true;
     }
     
 }
