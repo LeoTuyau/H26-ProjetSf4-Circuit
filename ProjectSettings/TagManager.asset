@@ -10,6 +10,7 @@ TagManager:
   - Structure
   - Pile
   - Resistance
+  - Node
   layers:
   - Default
   - TransparentFX
