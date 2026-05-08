@@ -6,8 +6,8 @@ public class BoutonResistance : MonoBehaviour, IPointerDownHandler
     [SerializeField] ItemSpawner itemSpawner;
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Bouton pressé (au clic, pas au relâchement)");
+        Debug.Log("Bouton pressï¿½ (au clic, pas au relï¿½chement)");
 
-        itemSpawner.spawnResistance();
+        itemSpawner.SpawnResistance();
     }
 }
