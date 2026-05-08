@@ -10,8 +10,8 @@ public class BoiteInfo : MonoBehaviour
     public static BoiteInfo Instance;
  
     [SerializeField] private GameObject panel;
-    [SerializeField] private TMP_Text   texte;
-    [SerializeField] private Vector2    offset = new Vector2(-150f, 150f);
+    [SerializeField] private TMP_Text texte;
+    private Vector2 offset = new Vector2(170,-80);
 
     private RectTransform rectTransform;
  

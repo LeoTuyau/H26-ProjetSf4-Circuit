@@ -74,7 +74,6 @@ public class ItemSpawner : MonoBehaviour
         n.SetOffset(0f);
         go.SetActive(true); // toujours visible contrairement aux noeuds de composantes
 
-        circuitManager.AddNoeudLibre(n); // pour le mode fil
         mouseManager.DragButtonStart(go);
         return go;
     }

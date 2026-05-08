@@ -8,6 +8,7 @@ public class MouseManager : MonoBehaviour
     [SerializeField] CircuitManager circuitManager;
     [SerializeField] ItemSpawner    itemSpawner;
     [SerializeField] TMP_Text       tmp;
+    [SerializeField] HelpMenu menu;
  
     private string mode = "defaut";
     private GameObject objetCourant;
@@ -69,7 +70,11 @@ public class MouseManager : MonoBehaviour
             {
                 objetCourant.transform.Rotate(0f, 0f, 90f);
             }
-        } 
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            menu.Toggle();
+        }
     }
  
     // ─── Mode release (après spawn bouton) ───────────────────────────

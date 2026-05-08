@@ -30,22 +30,19 @@ public class ComposanteHover : MonoBehaviour
         if (composante == null) return;
         BoiteInfo.Instance.Afficher(BuildTexte());
     }
- 
+
     private string BuildTexte()
     {
         string texte = "";
- 
-        // Tension — affiché pour Pile et Resistance
+
         if (composante is Pile)
-            texte += $"Tension : {composante.Tension:F2} V";
- 
-        // Résistance — affiché seulement pour Resistance
+            texte += $"Tension : {composante.Tension:F2} V\n";
+
         if (composante is Resistance)
-            texte += $"Résistance : {composante.ValeurOhms:F2} Ω";
- 
-        // Courant — affiché pour tous
+            texte += $"Résistance : {composante.ValeurOhms:F2} Ω\n";
+
         texte += $"Courant : {composante.Courant:F3} A";
- 
+
         return texte.TrimEnd();
     }
 }
