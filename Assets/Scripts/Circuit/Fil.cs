@@ -1,48 +1,66 @@
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
-using UnityEngine.UIElements;
-
+ 
 public class Fil : MonoBehaviour
 {
-    bool sens; //true : a->b, false : b->a
-    Vector3 posA;
-    Vector3 posB;
-    GameObject ObjetA;
-    GameObject ObjetB;
-    float anchorOffsetA;
-    float anchorOffsetB;
-
-    void Start()
+    private Noeud noeudA;
+    private Noeud noeudB;
+ 
+    public void SetNoeuds(Noeud a, Noeud b)
     {
-
+        noeudA = a;
+        noeudB = b;
     }
-
-    void Update()
+ 
+    // ─── Sens du courant ──────────────────────────────────────────────
+ 
+    // 1  = courant va de A vers B (potentiel A > potentiel B)
+    // -1 = courant va de B vers A (potentiel B > potentiel A)
+    //  0 = pas de courant
+    public int Sens
     {
-        if (ObjetA != null && ObjetB != null)
+        get
         {
-            Vector3 posAnchorA = ObjetA.transform.position + ObjetA.transform.right * anchorOffsetA;
-            Vector3 posAnchorB = ObjetB.transform.position + ObjetB.transform.right * anchorOffsetB;
-
-            Vector3 direction = posAnchorA - posAnchorB;
-
-            transform.position = (posAnchorA + posAnchorB) / 2f;
-
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-
-            transform.localScale = new Vector3(transform.localScale.x, direction.magnitude, 1f);
+            if (noeudA == null || noeudB == null) return 0;
+            float diff = noeudA.Potentiel - noeudB.Potentiel;
+            if (Mathf.Abs(diff) < 0.0001f) return 0;
+            return diff > 0 ? 1 : -1;
         }
     }
-    public void SetAttaches(GameObject ObjetA, GameObject ObjetB)
+ 
+    // Intensité du courant dans ce fil (A)
+    public float Courant
     {
-        this.ObjetA = ObjetA;
-        this.ObjetB = ObjetB;
+        get
+        {
+            if (noeudA == null || noeudB == null) return 0f;
+            return noeudA.Potentiel - noeudB.Potentiel; // sera divisé par R dans la simulation
+        }
     }
-    public void SetAnchorOffsets(GameObject AnchorA, GameObject AnchorB)
+ 
+    public Noeud NoeudA => noeudA;
+    public Noeud NoeudB => noeudB;
+ 
+    // ─── Visuel ───────────────────────────────────────────────────────
+ 
+    void Update()
     {
-        anchorOffsetA = AnchorA.GetComponent<Anchor>().GetOffset();
-        anchorOffsetB = AnchorB.GetComponent<Anchor>().GetOffset();
+        if (noeudA == null || noeudB == null) return;
+ 
+        Vector3 posA = GetPosNoeud(noeudA);
+        Vector3 posB = GetPosNoeud(noeudB);
+        Vector3 direction = posA - posB;
+ 
+        transform.position = (posA + posB) / 2f;
+ 
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+        transform.localScale = new Vector3(transform.localScale.x, direction.magnitude, 1f);
+    }
+ 
+    Vector3 GetPosNoeud(Noeud n)
+    {
+        if (n.Parent != null)
+            return n.Parent.transform.position + n.Parent.transform.right * n.Offset;
+        return n.transform.position;
     }
 }
