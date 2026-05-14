@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
 {
-    [SerializeField] List<Composante> composantes = new List<Composante>();
-    [SerializeField] List<Pile> piles = new List<Pile>();
-    [SerializeField] List<Noeud> noeudsAffiches = new List<Noeud>();
-    [SerializeField] TMP_Text tmp;
-    [SerializeField] ItemSpawner itemSpawner;
-    [SerializeField] BouttonFil BtnFil;
-    [SerializeField] MouseManager mouseManager;
+    [SerializeField] List<Composante> composantes    = new List<Composante>();
+    [SerializeField] List<Pile>       piles          = new List<Pile>();
+    [SerializeField] List<Fil>        fils           = new List<Fil>();
+    [SerializeField] List<Noeud>      noeudsAffiches = new List<Noeud>();
+    [SerializeField] TMP_Text         tmp;
+    [SerializeField] ItemSpawner      itemSpawner;
+    [SerializeField] BouttonFil       BtnFil;
+    [SerializeField] MouseManager     mouseManager;
 
     bool modeFil = false;
 
@@ -25,14 +26,15 @@ public class CircuitManager : MonoBehaviour
         {
             tmp.text = "Circuit fermé";
             SimulerCircuit();
+            MettreAJourSensFils();
         }
         else
         {
             tmp.text = "Circuit ouvert";
+            foreach (Fil fil in fils)
+                fil.SetSens(0);
         }
     }
-
-    // ─── Mode fil ─────────────────────────────────────────────────────
 
     public void ToggleFil()
     {
@@ -71,7 +73,9 @@ public class CircuitManager : MonoBehaviour
     public void AddFil(Noeud n1, Noeud n2)
     {
         n1.Connecter(n2);
-        itemSpawner.SpawnFil(n1, n2);
+        GameObject filGO = itemSpawner.SpawnFil(n1, n2);
+        Fil fil = filGO.GetComponent<Fil>();
+        if (fil != null) fils.Add(fil);
     }
 
     public void AddComposante(Composante c)
@@ -80,15 +84,13 @@ public class CircuitManager : MonoBehaviour
         if (c is Pile p) piles.Add(p);
     }
 
-    // ─── Circuit fermé (DFS) ──────────────────────────────────────────
-
     bool circuitFerme()
     {
         if (piles.Count == 0) return false;
 
         foreach (Pile pile in piles)
         {
-            Noeud depart = pile.Noeud2;
+            Noeud depart      = pile.Noeud2;
             Noeud destination = pile.Noeud1;
 
             if (depart.Voisins.Count == 0 || destination.Voisins.Count == 0)
@@ -131,20 +133,15 @@ public class CircuitManager : MonoBehaviour
         return null;
     }
 
-    // ─── Simulation — Méthode des noeuds (MNA) ───────────────────────
-
     void SimulerCircuit()
     {
-        // 1. Collecter tous les noeuds
         List<Noeud> tousLesNoeuds = CollecterNoeuds();
         if (tousLesNoeuds.Count < 2) return;
 
-        // 2. GND = noeud1 de la première pile
         Noeud gnd = piles[0].Noeud1;
         gnd.Potentiel = 0f;
         gnd.Index = -1;
 
-        // 3. Numéroter par groupes
         Dictionary<Noeud, int> indexMap = new Dictionary<Noeud, int>();
         int n = 0;
 
@@ -170,9 +167,8 @@ public class CircuitManager : MonoBehaviour
 
         if (n == 0) return;
 
-        // 4. Construire G et I
         float[,] G = new float[n, n];
-        float[] I = new float[n];
+        float[]  I = new float[n];
 
         foreach (Composante c in composantes)
         {
@@ -194,7 +190,7 @@ public class CircuitManager : MonoBehaviour
 
         foreach (Pile pile in piles)
         {
-            int iPlus = pile.Noeud2.Index;
+            int iPlus  = pile.Noeud2.Index;
             int iMoins = pile.Noeud1.Index;
 
             if (iPlus < 0) continue;
@@ -206,13 +202,12 @@ public class CircuitManager : MonoBehaviour
             if (iMoins >= 0)
             {
                 G[iMoins, iMoins] += bigG;
-                G[iPlus, iMoins] -= bigG;
-                G[iMoins, iPlus] -= bigG;
+                G[iPlus,  iMoins] -= bigG;
+                G[iMoins, iPlus]  -= bigG;
                 I[iMoins] -= bigG * pile.Tension;
             }
         }
 
-        // 5. Résoudre G × V = I
         float[] V = GaussElimination(G, I, n);
         if (V == null)
         {
@@ -220,11 +215,9 @@ public class CircuitManager : MonoBehaviour
             return;
         }
 
-        // 6. Injecter les potentiels
         foreach (Noeud noeud in tousLesNoeuds)
             noeud.Potentiel = noeud.Index >= 0 ? V[noeud.Index] : 0f;
 
-        // 7. Courant dans chaque composante
         foreach (Composante c in composantes)
         {
             if (c is Pile)
@@ -252,13 +245,47 @@ public class CircuitManager : MonoBehaviour
         }
     }
 
-    // ─── TrouverGroupe ────────────────────────────────────────────────
+    void MettreAJourSensFils()
+    {
+        foreach (Fil fil in fils)
+        {
+            Noeud a = fil.NoeudA;
+            Noeud b = fil.NoeudB;
+
+            Composante compA = a?.Parent;
+            Composante compB = b?.Parent;
+
+            bool courantA = compA != null && compA.Courant > 0.0001f;
+            bool courantB = compB != null && compB.Courant > 0.0001f;
+
+            if (!courantA || !courantB) { fil.SetSens(0); continue; }
+
+            bool aEstSortie = (a == compA.Noeud2);
+            bool bEstSortie = (b == compB.Noeud2);
+
+            int sens = 0;
+            if (aEstSortie && !bEstSortie) sens = 1;
+            else if (!aEstSortie && bEstSortie) sens = -1;
+            else if (aEstSortie && bEstSortie)
+            {
+                if (compA is Pile) sens = 1;
+                else if (compB is Pile) sens = -1;
+            }
+            else
+            {
+                if (compA is Pile) sens = -1;
+                else if (compB is Pile) sens = 1;
+            }
+
+            fil.SetSens(sens);
+        }
+    }
 
     List<Noeud> TrouverGroupe(Noeud depart)
     {
-        List<Noeud> groupe = new List<Noeud>();
-        HashSet<Noeud> vus = new HashSet<Noeud>();
-        Queue<Noeud> queue = new Queue<Noeud>();
+        List<Noeud>    groupe = new List<Noeud>();
+        HashSet<Noeud> vus    = new HashSet<Noeud>();
+        Queue<Noeud>   queue  = new Queue<Noeud>();
         queue.Enqueue(depart);
 
         while (queue.Count > 0)
@@ -276,28 +303,42 @@ public class CircuitManager : MonoBehaviour
         return groupe;
     }
 
-    // ─── CollecterNoeuds ──────────────────────────────────────────────
-
     List<Noeud> CollecterNoeuds()
+{
+    HashSet<Noeud> vus = new HashSet<Noeud>();
+    List<Noeud> liste  = new List<Noeud>();
+
+    if (piles.Count == 0) return liste;
+
+    // Partir de la pile et ne collecter que les noeuds connectés
+    Queue<Noeud> queue = new Queue<Noeud>();
+    queue.Enqueue(piles[0].Noeud1);
+    queue.Enqueue(piles[0].Noeud2);
+
+    while (queue.Count > 0)
     {
-        HashSet<Noeud> vus = new HashSet<Noeud>();
-        List<Noeud> liste = new List<Noeud>();
+        Noeud courant = queue.Dequeue();
+        if (!vus.Add(courant)) continue;
+        liste.Add(courant);
 
-        foreach (Composante c in composantes)
-        {
-            if (c.Noeud1 != null && vus.Add(c.Noeud1)) liste.Add(c.Noeud1);
-            if (c.Noeud2 != null && vus.Add(c.Noeud2)) liste.Add(c.Noeud2);
-        }
+        // Traverser les fils
+        foreach (Noeud voisin in courant.Voisins)
+            if (!vus.Contains(voisin))
+                queue.Enqueue(voisin);
 
-        return liste;
+        // Traverser la composante parente
+        Noeud autre = GetAutreNoeud(courant);
+        if (autre != null && !vus.Contains(autre))
+            queue.Enqueue(autre);
     }
 
-    // ─── GaussElimination ─────────────────────────────────────────────
+    return liste;
+}
 
     float[] GaussElimination(float[,] A, float[] b, int size)
     {
         float[,] M = new float[size, size];
-        float[] r = new float[size];
+        float[]  r = new float[size];
         for (int i = 0; i < size; i++)
         {
             r[i] = b[i];
@@ -307,13 +348,13 @@ public class CircuitManager : MonoBehaviour
 
         for (int col = 0; col < size; col++)
         {
-            int pivotRow = col;
-            float maxVal = Mathf.Abs(M[col, col]);
+            int   pivotRow = col;
+            float maxVal   = Mathf.Abs(M[col, col]);
             for (int row = col + 1; row < size; row++)
             {
                 if (Mathf.Abs(M[row, col]) > maxVal)
                 {
-                    maxVal = Mathf.Abs(M[row, col]);
+                    maxVal   = Mathf.Abs(M[row, col]);
                     pivotRow = row;
                 }
             }
@@ -343,4 +384,36 @@ public class CircuitManager : MonoBehaviour
 
         return x;
     }
+    public void ResetCircuit()
+{
+    // Désactiver le mode fil si actif
+    ToggleFil(false);
+
+    // Supprimer les fils
+    foreach (Fil fil in fils)
+    {
+        if (fil != null)
+            Destroy(fil.gameObject);
+    }
+
+    // Supprimer les composantes
+    foreach (Composante c in composantes)
+    {
+        if (c != null)
+            Destroy(c.gameObject);
+    }
+
+    // Vider les listes
+    fils.Clear();
+    composantes.Clear();
+    piles.Clear();
+    noeudsAffiches.Clear();
+
+    // Réinitialiser le texte
+    tmp.text = "Circuit ouvert";
+
+    // Réinitialiser le mode souris
+    modeFil = false;
+    mouseManager.SetMode("defaut");
+}
 }
