@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 94859054}
   - component: {fileID: 94859053}
+  - component: {fileID: 94859055}
   m_Layer: 0
   m_Name: Pendule
   m_TagString: Untagged
@@ -170,6 +171,22 @@ Transform:
   - {fileID: 1708617198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &94859055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94859052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c7e03719a1ed547b629ff9a98b7004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fil: {fileID: 1708617198}
+  boule: {fileID: 1999221088}
+  penduleScript: {fileID: 94859053}
+  camera: {fileID: 875310464}
 --- !u!1 &190339454
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 305, y: 167.25482}
+  m_AnchoredPosition: {x: 305, y: 74}
   m_SizeDelta: {x: 848.746, y: 369.286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &359413454
@@ -1388,7 +1405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300.528, y: 187.28998}
+  m_AnchoredPosition: {x: 300.528, y: 276.59}
   m_SizeDelta: {x: 601.056, y: 374.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &936507647
@@ -1843,7 +1860,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 9.81
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2331,7 +2348,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c18c9a1fb922c464ca6e8144cbb71765, type: 2}
+  - {fileID: 2100000, guid: d364701dff1bfb544b71aff09d5f013f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2625,8 +2642,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030518, y: -0.0034854}
-  m_SizeDelta: {x: 1920, y: 955.8}
+  m_AnchoredPosition: {x: -18.308, y: 6.099}
+  m_SizeDelta: {x: 2127.538, y: 1138.883}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1981296730
 MonoBehaviour:
@@ -2741,7 +2758,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c18c9a1fb922c464ca6e8144cbb71765, type: 2}
+  - {fileID: 2100000, guid: d364701dff1bfb544b71aff09d5f013f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3127,7 +3144,8 @@ PrefabInstance:
       value: PauseMenuCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8970256810523547551, guid: df1cb0afbf3b18d4d8ddd763e27e1b58, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df1cb0afbf3b18d4d8ddd763e27e1b58, type: 3}

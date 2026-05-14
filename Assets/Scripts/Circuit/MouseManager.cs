@@ -1,40 +1,36 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
-using System.Collections.Generic;
-
+ 
 public class MouseManager : MonoBehaviour
 {
-    [SerializeField] GameObject currentObject;
-    [SerializeField] GameObject filConnexion1;
-    string mode = "defaut";
-    [SerializeField] CircuitManager CirMng;
+    [SerializeField] CircuitManager circuitManager;
+    [SerializeField] ItemSpawner    itemSpawner;
+    [SerializeField] TMP_Text       tmp;
+    [SerializeField] HelpMenu menu;
+ 
+    private string mode = "defaut";
+    private GameObject objetCourant;
+    private List<Noeud> noeudsSelectionnes = new List<Noeud>();
+ 
     Vector3 mousePos;
     Vector3 worldPos;
-    [SerializeField] TMP_Text tmp;
-    int filCount = 0;
-    [SerializeField] List<GameObject> selectedAnchors = new List<GameObject>();
-
-
-    [SerializeField] ItemSpawner itemSpawner;
-
+ 
     void Update()
     {
         mousePos = Mouse.current.position.ReadValue();
         worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-        //Switch
+ 
         switch (mode)
         {
             case "defaut":
-                tmp.text = "Mode : defaut";
-                selectedAnchors.Clear();
-                UpdateModeDefault();
+                tmp.text = "Mode : défaut";
+                UpdateModeDefaut();
                 break;
             case "buttonPress":
-                tmp.text = "Mode : buttonPress";
-                selectedAnchors.Clear();
-                UpdateRelease();
+                tmp.text = "Mode : déplacement";
+                UpdateModeRelease();
                 break;
             case "fil":
                 tmp.text = "Mode : fil";
@@ -42,108 +38,128 @@ public class MouseManager : MonoBehaviour
                 break;
         }
     }
-    private void UpdateModeDefault()
+ 
+    // ─── Mode défaut ──────────────────────────────────────────────────
+ 
+    private void UpdateModeDefaut()
     {
-        // Quand on clique
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePos);
-
             if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                currentObject = hit.collider.gameObject;
-                Debug.Log("Clicked on: " + currentObject.name);
-            }
+                objetCourant = hit.collider.gameObject;
         }
-        // Tant que le bouton est maintenu
-        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
+ 
+        if (Mouse.current.leftButton.isPressed && objetCourant != null
+            && !objetCourant.CompareTag("Noeud")
+            && !objetCourant.CompareTag("Background"))
         {
-            currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
+                objetCourant.transform.position.z);
+        }
+ 
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
+            objetCourant = null;
+        if (Mouse.current.leftButton.isPressed && objetCourant != null
+            && !objetCourant.CompareTag("Noeud")
+            && !objetCourant.CompareTag("Background"))
+        {
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
+            objetCourant.transform.position.z);
             if (Input.GetKeyDown(KeyCode.R))
             {
-                currentObject.transform.Rotate(0, 0, 90);
+                objetCourant.transform.Rotate(0f, 0f, 90f);
             }
         }
-        // Quand on rel�che
-        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            currentObject = null;
+            menu.Toggle();
         }
     }
-    private void UpdateRelease()
+ 
+    // ─── Mode release (après spawn bouton) ───────────────────────────
+ 
+    private void UpdateModeRelease()
     {
-        // Tant que le bouton est maintenu
-        if (Mouse.current.leftButton.isPressed && currentObject != null && !currentObject.CompareTag("Anchor") && !currentObject.CompareTag("Background"))
+        if (Mouse.current.leftButton.isPressed && objetCourant != null
+            && !objetCourant.CompareTag("Background"))
         {
-            currentObject.transform.position = new Vector3(worldPos.x, worldPos.y, currentObject.transform.position.z);
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                currentObject.transform.Rotate(0, 0, 90);
-            }
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
+                objetCourant.transform.position.z);
         }
-        // Quand on relache
+ 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
-            currentObject = null;
+            objetCourant = null;
             mode = "defaut";
         }
+        if (Mouse.current.leftButton.isPressed && objetCourant != null
+            && !objetCourant.CompareTag("Noeud")
+            && !objetCourant.CompareTag("Background"))
+        {
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
+            objetCourant.transform.position.z);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                objetCourant.transform.Rotate(0f, 0f, 90f);
+            }
+        } 
     }
+ 
+    // ─── Mode fil ─────────────────────────────────────────────────────
+ 
     private void UpdateModeFil()
     {
-        if (filCount < 2) //On n'est pas encore a deux anchors
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            if (Physics.Raycast(ray, out RaycastHit hit)
+                && hit.collider.CompareTag("Noeud"))
             {
-                Ray ray = Camera.main.ScreenPointToRay(mousePos);
-
-                if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.CompareTag("Anchor"))
+                Noeud noeud = hit.collider.GetComponent<Noeud>();
+                if (noeud == null) return;
+ 
+                if (noeud.Selectionne)
                 {
-                    currentObject = hit.collider.gameObject;
-                    Anchor anchor = currentObject.GetComponent<Anchor>();
-                    if (anchor != null)
-                    {
-                        if (!anchor.GetSelect()) // Anchor pas selecte
-                        {
-                            if (filCount == 1)
-                            {
-                                if (selectedAnchors[0].GetComponent<Anchor>().GetAttache() != anchor.GetAttache())
-                                {
-                                    selectedAnchors.Add(currentObject);
-                                    anchor.ToggleSelect();
-                                }
-                            }
-                            else // selectedAnchors = 0
-                            {
-                                selectedAnchors.Add(currentObject);
-                                anchor.ToggleSelect();
-                            }
-                        }
-                        else // Anchor deja selecte
-                        {
-                            selectedAnchors.Remove(currentObject);
-                            anchor.ToggleSelect();
-                        }
-                    }
+                    // Désélectionner
+                    noeud.ToggleSelect();
+                    noeudsSelectionnes.Remove(noeud);
+                }
+                else
+                {
+                    // Ne pas connecter deux noeuds du même parent
+                    if (noeudsSelectionnes.Count == 1
+                        && noeudsSelectionnes[0].Parent == noeud.Parent)
+                        return;
+ 
+                    noeud.ToggleSelect();
+                    noeudsSelectionnes.Add(noeud);
+                }
+ 
+                // Deux noeuds sélectionnés → créer le fil
+                if (noeudsSelectionnes.Count == 2)
+                {
+                    circuitManager.AddFil(noeudsSelectionnes[0], noeudsSelectionnes[1]);
+ 
+                    // Déselectionner
+                    foreach (Noeud n in noeudsSelectionnes)
+                        n.Deselectionner();
+                    noeudsSelectionnes.Clear();
+ 
+                    circuitManager.ToggleFil(false);
                 }
             }
         }
-        else
-        {
-            mode = "defaut";
-            CirMng.AddFil(selectedAnchors);
-            selectedAnchors.Clear();
-            CirMng.ToggleFil(false);
-        }
-        filCount = selectedAnchors.Count;
     }
+ 
+    // ─── API publique ─────────────────────────────────────────────────
+ 
     public void DragButtonStart(GameObject obj)
     {
         mode = "buttonPress";
-        currentObject = obj;
-        CirMng.ToggleFil(false);
+        objetCourant = obj;
+        circuitManager.ToggleFil(false);
     }
-    public void SetMode(string mode)
-    {
-        this.mode = mode;
-    }
+ 
+    public void SetMode(string m) => mode = m;
 }
