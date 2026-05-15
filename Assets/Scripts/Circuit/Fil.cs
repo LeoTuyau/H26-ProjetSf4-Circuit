@@ -89,7 +89,7 @@ public class Fil : MonoBehaviour
         if (modePotentiel)
         {
             textP.text = Potentiel+" V";
-            textP.transform.position = transform.position + new Vector3(-0.4f,0,0);
+            textP.transform.position = transform.position + new Vector3(-0.4f,0,-1);
             textP.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
     }

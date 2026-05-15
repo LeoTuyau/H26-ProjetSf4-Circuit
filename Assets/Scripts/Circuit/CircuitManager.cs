@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
 {
-    [SerializeField] List<Composante> composantes    = new List<Composante>();
-    [SerializeField] List<Pile>       piles          = new List<Pile>();
-    [SerializeField] List<Fil>        fils           = new List<Fil>();
-    [SerializeField] List<Noeud>      noeudsAffiches = new List<Noeud>();
-    [SerializeField] TMP_Text         tmp;
-    [SerializeField] ItemSpawner      itemSpawner;
-    [SerializeField] BouttonFil       BtnFil;
-    [SerializeField] MouseManager     mouseManager;
+    [SerializeField] List<Composante> composantes = new List<Composante>();
+    [SerializeField] List<Pile> piles = new List<Pile>();
+    [SerializeField] List<Fil> fils = new List<Fil>();
+    [SerializeField] List<Noeud> noeudsAffiches = new List<Noeud>();
+    [SerializeField] ItemSpawner itemSpawner;
+    [SerializeField] BouttonFil BtnFil;
+    [SerializeField] MouseManager mouseManager;
 
     bool modeFil = false;
-
     bool modePotentiel = false;
+    bool modeSlider = false;
 
     void Start()
     {
@@ -26,39 +24,32 @@ public class CircuitManager : MonoBehaviour
     {
         if (circuitFerme())
         {
-            tmp.text = "Circuit fermé";
             SimulerCircuit();
             MettreAJourSensFils();
-
-            foreach (Fil fil in fils)
-                {
-                    float va = fil.NoeudA.Potentiel;
-                    float vb = fil.NoeudB.Potentiel;
-                    fil.Potentiel = (va + vb) * 0.5f;
-                }
         }
         else
         {
-            tmp.text = "Circuit ouvert";
             foreach (Fil fil in fils)
                 fil.SetSens(0);
         }
     }
 
-    public void ToggleModePotentielFil()
+    // ─── Mode potentiel fil ───────────────────────────────────────────
+    public void ToggleModeSlider()
     {
-        if(modePotentiel){
-            modePotentiel = false;
-        }
-        else
+        modeSlider = !modeSlider;
+        foreach (Composante composante in composantes)
         {
-            modePotentiel = true;
-        }
-        foreach(Fil fil in fils)
-        {
-            fil.ToggleModeP(modePotentiel);
+            composante.ToggleModeSlider(modeSlider);
         }
     }
+    public void ToggleModePotentielFil()
+    {
+        modePotentiel = !modePotentiel;
+        foreach (Fil fil in fils)
+            fil.ToggleModeP(modePotentiel);
+    }
+
     // ─── Mode fil ─────────────────────────────────────────────────────
 
     public void ToggleFil()
@@ -126,7 +117,7 @@ public class CircuitManager : MonoBehaviour
 
         foreach (Pile pile in piles)
         {
-            Noeud depart      = pile.Noeud2;
+            Noeud depart = pile.Noeud2;
             Noeud destination = pile.Noeud1;
 
             if (depart.Voisins.Count == 0 || destination.Voisins.Count == 0)
@@ -206,7 +197,7 @@ public class CircuitManager : MonoBehaviour
         if (n == 0) return;
 
         float[,] G = new float[n, n];
-        float[]  I = new float[n];
+        float[] I = new float[n];
 
         foreach (Composante c in composantes)
         {
@@ -228,7 +219,7 @@ public class CircuitManager : MonoBehaviour
 
         foreach (Pile pile in piles)
         {
-            int iPlus  = pile.Noeud2.Index;
+            int iPlus = pile.Noeud2.Index;
             int iMoins = pile.Noeud1.Index;
 
             if (iPlus < 0) continue;
@@ -240,8 +231,8 @@ public class CircuitManager : MonoBehaviour
             if (iMoins >= 0)
             {
                 G[iMoins, iMoins] += bigG;
-                G[iPlus,  iMoins] -= bigG;
-                G[iMoins, iPlus]  -= bigG;
+                G[iPlus, iMoins] -= bigG;
+                G[iMoins, iPlus] -= bigG;
                 I[iMoins] -= bigG * pile.Tension;
             }
         }
@@ -281,82 +272,82 @@ public class CircuitManager : MonoBehaviour
                 c.SetCourant(c.ValeurOhms > 0f ? Mathf.Abs(delta / c.ValeurOhms) : 0f);
             }
         }
+        foreach (Fil fil in fils)
+        {
+            fil.Potentiel =
+                (fil.NoeudA.Potentiel + fil.NoeudB.Potentiel) / 2f;
+        }
     }
 
     // ─── Sens des fils ────────────────────────────────────────────────
 
     void MettreAJourSensFils()
-{
-    foreach (Fil fil in fils)
     {
-        fil.SetSens(CalculerSensFil(fil));
-    }
-}
-
-int CalculerSensFil(Fil fil)
-{
-    Noeud a = fil.NoeudA;
-    Noeud b = fil.NoeudB;
-
-    Composante compA = a?.Parent;
-    Composante compB = b?.Parent;
-
-    if (compA == null || compB == null) return 0;
-    if (compA.Courant <= 0.0001f || compB.Courant <= 0.0001f) return 0;
-
-    bool aEstSortie = (a == compA.Noeud1);
-    bool bEstSortie = (b == compB.Noeud1);
-
-    Debug.Log($"Fil: compA={compA.name} a.pot={a.Potentiel} aEstSortie={aEstSortie} | compB={compB.name} b.pot={b.Potentiel} bEstSortie={bEstSortie}");
-
-    if (aEstSortie && !bEstSortie) return 1;
-    if (!aEstSortie && bEstSortie) return -1;
-
-    if (compA is Pile) return aEstSortie ? -1 : 1;
-    if (compB is Pile) return bEstSortie ? 1 : -1;
-
-    Noeud autreA = GetAutreNoeud(a);
-    Noeud autreB = GetAutreNoeud(b);
-
-    float potA = autreA != null ? autreA.Potentiel : a.Potentiel;
-    float potB = autreB != null ? autreB.Potentiel : b.Potentiel;
-
-    if (aEstSortie) return potA > potB ? 1 : -1;
-    else            return potA < potB ? 1 : -1;
-}
-float TrouverPotentielVoisin(Noeud n)
-{
-    // Traverser la composante parente pour trouver l'autre potentiel
-    Composante comp = n.Parent;
-    if (comp == null) return n.Potentiel;
-
-    // L'autre noeud de la composante a un potentiel différent
-    Noeud autreNoeud = (n == comp.Noeud1) ? comp.Noeud2 : comp.Noeud1;
-
-    // Chercher dans les voisins de l'autre noeud un potentiel significatif
-    foreach (Noeud voisin in autreNoeud.Voisins)
-    {
-        Composante compVoisin = voisin.Parent;
-        if (compVoisin == null) continue;
-
-        Noeud autreVoisin = (voisin == compVoisin.Noeud1) 
-            ? compVoisin.Noeud2 
-            : compVoisin.Noeud1;
-
-        if (Mathf.Abs(autreVoisin.Potentiel - n.Potentiel) > 0.0001f)
-            return autreVoisin.Potentiel;
+        foreach (Fil fil in fils)
+            fil.SetSens(CalculerSensFil(fil));
     }
 
-    return autreNoeud.Potentiel;
-}
+    int CalculerSensFil(Fil fil)
+    {
+        Noeud a = fil.NoeudA;
+        Noeud b = fil.NoeudB;
+
+        Composante compA = a?.Parent;
+        Composante compB = b?.Parent;
+
+        if (compA == null || compB == null) return 0;
+        if (compA.Courant <= 0.0001f || compB.Courant <= 0.0001f) return 0;
+
+        bool aEstSortie = (a == compA.Noeud2);
+        bool bEstSortie = (b == compB.Noeud2);
+
+        int sens = 0;
+        if (aEstSortie && !bEstSortie) sens = 1;
+        else if (!aEstSortie && bEstSortie) sens = -1;
+        else if (compA is Pile) sens = aEstSortie ? 1 : -1;
+        else if (compB is Pile) sens = bEstSortie ? -1 : 1;
+        else
+        {
+            bool pileEstCoteA = PileEstAccessibleDepuis(a);
+            sens = aEstSortie ? (pileEstCoteA ? 1 : -1) : (pileEstCoteA ? -1 : 1);
+        }
+
+        Debug.Log($"Fil: compA={compA.name} aEstSortie={aEstSortie} | compB={compB.name} bEstSortie={bEstSortie} | sens={sens}");
+        return sens;
+    }
+
+    bool PileEstAccessibleDepuis(Noeud depart)
+    {
+        HashSet<Noeud> visites = new HashSet<Noeud>();
+        Queue<Noeud> queue = new Queue<Noeud>();
+        queue.Enqueue(depart);
+
+        while (queue.Count > 0)
+        {
+            Noeud courant = queue.Dequeue();
+            if (visites.Contains(courant)) continue;
+            visites.Add(courant);
+
+            if (courant.Parent is Pile) return true;
+
+            Noeud autre = GetAutreNoeud(courant);
+            if (autre != null && !visites.Contains(autre))
+                queue.Enqueue(autre);
+
+            foreach (Noeud voisin in courant.Voisins)
+                if (!visites.Contains(voisin))
+                    queue.Enqueue(voisin);
+        }
+        return false;
+    }
 
     // ─── TrouverGroupe ────────────────────────────────────────────────
 
     List<Noeud> TrouverGroupe(Noeud depart)
     {
-        List<Noeud>    groupe = new List<Noeud>();
-        HashSet<Noeud> vus    = new HashSet<Noeud>();
-        Queue<Noeud>   queue  = new Queue<Noeud>();
+        List<Noeud> groupe = new List<Noeud>();
+        HashSet<Noeud> vus = new HashSet<Noeud>();
+        Queue<Noeud> queue = new Queue<Noeud>();
         queue.Enqueue(depart);
 
         while (queue.Count > 0)
@@ -379,7 +370,7 @@ float TrouverPotentielVoisin(Noeud n)
     List<Noeud> CollecterNoeuds()
     {
         HashSet<Noeud> vus = new HashSet<Noeud>();
-        List<Noeud>  liste = new List<Noeud>();
+        List<Noeud> liste = new List<Noeud>();
 
         if (piles.Count == 0) return liste;
 
@@ -410,7 +401,7 @@ float TrouverPotentielVoisin(Noeud n)
     float[] GaussElimination(float[,] A, float[] b, int size)
     {
         float[,] M = new float[size, size];
-        float[]  r = new float[size];
+        float[] r = new float[size];
         for (int i = 0; i < size; i++)
         {
             r[i] = b[i];
@@ -420,13 +411,13 @@ float TrouverPotentielVoisin(Noeud n)
 
         for (int col = 0; col < size; col++)
         {
-            int   pivotRow = col;
-            float maxVal   = Mathf.Abs(M[col, col]);
+            int pivotRow = col;
+            float maxVal = Mathf.Abs(M[col, col]);
             for (int row = col + 1; row < size; row++)
             {
                 if (Mathf.Abs(M[row, col]) > maxVal)
                 {
-                    maxVal   = Mathf.Abs(M[row, col]);
+                    maxVal = Mathf.Abs(M[row, col]);
                     pivotRow = row;
                 }
             }
@@ -457,6 +448,8 @@ float TrouverPotentielVoisin(Noeud n)
         return x;
     }
 
+    // ─── Reset ────────────────────────────────────────────────────────
+
     public void ResetCircuit()
     {
         ToggleFil(false);
@@ -471,8 +464,6 @@ float TrouverPotentielVoisin(Noeud n)
         composantes.Clear();
         piles.Clear();
         noeudsAffiches.Clear();
-
-        tmp.text = "Circuit ouvert";
         modeFil = false;
         mouseManager.SetMode("defaut");
     }
