@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu Principal.unity
     guid: 7587a41dd954b1b4e81ef8e507125da4
   - enabled: 1
-    path: Assets/Scenes/Champ magnetique.unity
+    path: Assets/Scenes/Champ electrique.unity
     guid: 5147229a91882b740bceb214f4409eed
   - enabled: 1
     path: Assets/Scenes/Circuit.unity
