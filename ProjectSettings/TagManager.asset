@@ -11,6 +11,7 @@ TagManager:
   - Pile
   - Resistance
   - Noeud
+  - Fil
   layers:
   - Default
   - TransparentFX

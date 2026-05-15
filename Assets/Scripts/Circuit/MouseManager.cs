@@ -52,20 +52,20 @@ public class MouseManager : MonoBehaviour
  
         if (Mouse.current.leftButton.isPressed && objetCourant != null
             && !objetCourant.CompareTag("Noeud")
-            && !objetCourant.CompareTag("Background"))
+            && !objetCourant.CompareTag("Background")
+            && !objetCourant.CompareTag("Fil"))
         {
-            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
-                objetCourant.transform.position.z);
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y, objetCourant.transform.position.z);
         }
  
         if (Mouse.current.leftButton.wasReleasedThisFrame)
             objetCourant = null;
         if (Mouse.current.leftButton.isPressed && objetCourant != null
             && !objetCourant.CompareTag("Noeud")
-            && !objetCourant.CompareTag("Background"))
+            && !objetCourant.CompareTag("Background")
+            && !objetCourant.CompareTag("Fil"))
         {
-            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y,
-            objetCourant.transform.position.z);
+            objetCourant.transform.position = new Vector3(worldPos.x, worldPos.y, objetCourant.transform.position.z);
             if (Input.GetKeyDown(KeyCode.R))
             {
                 objetCourant.transform.Rotate(0f, 0f, 90f);
@@ -75,6 +75,12 @@ public class MouseManager : MonoBehaviour
         {
             menu.Toggle();
         }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            circuitManager.ToggleModePotentielFil();
+        }
+
+        
     }
  
     // ─── Mode release (après spawn bouton) ───────────────────────────
