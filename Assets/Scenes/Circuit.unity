@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 301504454}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Fil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2768,7 +2768,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: La difference de potentiel est cree aux bornes de la pile.
+  m_text: "La diff\xE9rence de potentiel (\u0394V), ou tension \xE9lectrique, est
+    la diff\xE9rence d\u2019\xE9nergie \xE9lectrique par unit\xE9 de charge entre
+    deux points d\u2019un circuit. Elle indique combien d\u2019\xE9nergie une charge
+    gagne ou perd en se d\xE9pla\xE7ant entre ces deux points. C\u2019est elle qui
+    \u201Cpousse\u201D les charges \xE9lectriques \xE0 circuler dans un circuit.
+    Elle se mesure en volts (V) et s\u2019exprime par \u0394V = RI. Dans un circuit,
+    une pile cr\xE9e une diff\xE9rence de potentiel entre ses bornes ce qui met les
+    \xE9lectrons en mouvement."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -2878,7 +2885,7 @@ GameObject:
   - component: {fileID: 1348581208}
   m_Layer: 0
   m_Name: Fil
-  m_TagString: Untagged
+  m_TagString: Fil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
