@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
- 
+
 /// <summary>
 /// Point de connexion entre composantes.
 /// Remplace Anchor — chaque composante a deux Noeud (borne1 et borne2).
@@ -9,40 +9,66 @@ using UnityEngine;
 public class Noeud : MonoBehaviour
 {
     // ─── Références ───────────────────────────────────────────────────
- 
+
     [SerializeField] private Composante parent;
     [SerializeField] private int borne;
     [SerializeField] private float offset;
- 
+
     void Awake()
     {
         rend = GetComponent<Renderer>();
     }
- 
+
     // ─── Connexions ───────────────────────────────────────────────────
- 
+
     private List<Noeud> voisins = new List<Noeud>();
- 
+
     // ─── Simulation ───────────────────────────────────────────────────
- 
+
     // Potentiel électrique à ce noeud (V) — calculé par CircuitManager
     public float Potentiel { get; set; }
- 
+
     // Index dans la matrice G — assigné par CircuitManager avant chaque simulation
     // -1 = noeud de référence (GND)
     public int Index { get; set; } = -1;
- 
+
+    /// <summary>
+    /// Cherche dans les voisins un potentiel différent du sien,
+    /// en regardant l'autre borne de la composante voisine.
+    /// Donne la "direction" du courant indépendamment de l'ordre de connexion.
+    /// </summary>
+    public float PotentielInterne
+    {
+        get
+        {
+            foreach (Noeud voisin in voisins)
+            {
+                Composante comp = voisin.Parent;
+                if (comp == null) continue;
+
+                float p1 = comp.PotentielNoeud1;
+                float p2 = comp.PotentielNoeud2;
+
+                if (voisin == comp.Noeud1 && Mathf.Abs(p2 - Potentiel) > 0.0001f)
+                    return p2;
+                if (voisin == comp.Noeud2 && Mathf.Abs(p1 - Potentiel) > 0.0001f)
+                    return p1;
+            }
+            return Potentiel;
+        }
+    }
+
     // ─── API ──────────────────────────────────────────────────────────
- 
+
     public Composante Parent => parent;
     public int Borne => borne;
     public float Offset => offset;
     public List<Noeud> Voisins => voisins;
- 
+
     public void SetParent(Composante c) => parent = c;
     public void SetBorne(int b) => borne = b;
     public void SetOffset(float o) => offset = o;
- 
+
     public void Connecter(Noeud autre)
     {
         if (!voisins.Contains(autre))
@@ -51,38 +77,38 @@ public class Noeud : MonoBehaviour
             autre.voisins.Add(this);
         }
     }
- 
+
     public void Deconnecter(Noeud autre)
     {
         if (voisins.Remove(autre))
             autre.voisins.Remove(this);
     }
- 
+
     // ─── Visuel ───────────────────────────────────────────────────────
- 
+
     [SerializeField] private Renderer rend;
     [SerializeField] private Material matDefaut;
     [SerializeField] private Material matSelectionne;
- 
+
     private bool selectionne = false;
     public bool Selectionne => selectionne;
- 
+
     public void ToggleSelect()
     {
         selectionne = !selectionne;
         if (rend != null)
             rend.sharedMaterial = selectionne ? matSelectionne : matDefaut;
     }
- 
+
     public void Deselectionner()
     {
         selectionne = false;
         if (rend != null)
             rend.sharedMaterial = matDefaut;
     }
- 
+
     // ─── Position ─────────────────────────────────────────────────────
- 
+
     void Update()
     {
         if (parent != null)
