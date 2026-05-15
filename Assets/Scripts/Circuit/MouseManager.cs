@@ -25,15 +25,12 @@ public class MouseManager : MonoBehaviour
         switch (mode)
         {
             case "defaut":
-                tmp.text = "Mode : défaut";
                 UpdateModeDefaut();
                 break;
             case "buttonPress":
-                tmp.text = "Mode : déplacement";
                 UpdateModeRelease();
                 break;
             case "fil":
-                tmp.text = "Mode : fil";
                 UpdateModeFil();
                 break;
         }
@@ -79,8 +76,12 @@ public class MouseManager : MonoBehaviour
         {
             circuitManager.ToggleModePotentielFil();
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            circuitManager.ToggleModeSlider();
+        }
 
-        
+
     }
  
     // ─── Mode release (après spawn bouton) ───────────────────────────

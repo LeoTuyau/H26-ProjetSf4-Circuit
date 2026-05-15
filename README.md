@@ -84,6 +84,25 @@ Un très grand enjeu que nous aurons est que nous devrons apprendre toute la th�
 ![UML prog](https://github.com/user-attachments/assets/c59e0774-32a6-464d-94dd-18f3c62e0ad5)
 
 
+Document Analyse partie 2
+
+Preuves d’exécutions du projet : 
+
+ Voir vidéo de notre application.
+
+Difficultés rencontrées : 
+
+Au cours de la réalisation de notre projet, on a rencontré plusieurs difficultés. Tout d’abord, la première difficulté rencontrée était le fait qu’on codait en C# parce que personne dans notre équipe était familier avec ce langage de programmation alors on a dû apprendre le plus possible toutes les fonctions utiles à notre projet. Aussi, on a rencontré un autre défi qui était d’intégrer le plus précisément possible les équations de physique pour bien simuler les scènes. On a aussi rencontré des défis concernant l’utilisation des fonctions UI sur Unity puisque c’est un engin qu’on n’a aussi jamais utilisé alors on a regardé plusieurs tutoriels pour apprendre comment faire un menu principal et relier les scènes ensembles. Nous avons également rencontré des défis liés à la gestion des interactions entre les objets (comme les boussoles, les aimants ou les particules), ainsi qu’à l’organisation du code pour garder un projet clair et fonctionnel. Enfin, le manque de temps nous a parfois empêchés d’implémenter toutes les idées souhaitées ou de perfectionner certains aspects du projet.
+Perspectives : 
+
+Si nous avions eu plus de temps, nous aurions enrichi nos projets en les rendant entièrement en 3D afin d’offrir une visualisation plus immersive et fidèle des phénomènes. Nous aurions également intégré plusieurs aimants et plusieurs fils conducteurs pour mieux illustrer la superposition des champs magnétiques et leurs interactions. Il aurait été pertinent d’ajouter des contrôles permettant de varier l’intensité du courant et de déplacer librement le fil conducteur dans l’espace, rendant l’expérience plus interactive et expérimentale. Enfin, l’ajout de graphiques aurait permis de représenter certaines données et d’apporter une dimension analytique supplémentaire, renforçant ainsi la compréhension globale du comportement observé.
+
+
+UML
+ 
+<img width="940" height="748" alt="image" src="https://github.com/user-attachments/assets/3a325b3d-ac7a-44d6-9336-692d11a35147" />
+
+
 
 
 
