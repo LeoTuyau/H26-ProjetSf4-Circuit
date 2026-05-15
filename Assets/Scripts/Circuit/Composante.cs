@@ -27,4 +27,9 @@ public class Composante : MonoBehaviour
 
     public float PotentielNoeud1 => noeud1 != null ? noeud1.Potentiel : 0f;
     public float PotentielNoeud2 => noeud2 != null ? noeud2.Potentiel : 0f;
+
+    public virtual void ToggleModeSlider(bool modeSlider)
+    {
+
+    }
 }
