@@ -89,7 +89,7 @@ public class Fil : MonoBehaviour
         if (modePotentiel)
         {
             textP.text = Potentiel+" V";
-            textP.transform.position = transform.position + new Vector3(-0.3f,0,0);
+            textP.transform.position = transform.position + new Vector3(-0.4f,0,0);
             textP.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
     }
@@ -126,8 +126,7 @@ public class Fil : MonoBehaviour
                 offsets[i] += Time.deltaTime * vitesse;
                 offsets[i]  = Mathf.Repeat(offsets[i], 1f);
 
-                fleches[i].transform.position = Vector3.Lerp(source, dest, offsets[i])
-                                               + new Vector3(0, 0, -1);
+                fleches[i].transform.position = Vector3.Lerp(source, dest, offsets[i])+ new Vector3(0, 0, -1);
                 fleches[i].transform.rotation  = rot;
                 fleches[i].SetActive(true);
             }
